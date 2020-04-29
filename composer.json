@@ -1,0 +1,16 @@
+{
+    "name": "idleherb/wp-reading-time-2020",
+    "description": "A basic reading time plugin for WordPress",
+    "version": "0.0.1",
+    "prefer-stable" : true,
+    "require": {
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
+        "wp-coding-standards/wpcs": "^2.2",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "phpunit/phpunit": "7.5.20"
+    }
+}
