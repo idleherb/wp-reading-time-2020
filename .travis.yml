@@ -24,10 +24,10 @@ matrix:
       env: WP_VERSION=latest
     - php: 7.2
       env: WP_VERSION=latest
+    - php: 7.2
+      env: WP_TRAVISCI=phpcs
     - php: 7.1
       env: WP_VERSION=latest
-    - php: 7.1
-      env: WP_TRAVISCI=phpcs
     - php: 7.0
       env: WP_VERSION=latest
     - php: 5.6
