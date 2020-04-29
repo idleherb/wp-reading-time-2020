@@ -25,3 +25,4 @@ node_modules/
 # misc
 .DS_Store
 vendor/
+.vscode-terminal-init.sh
