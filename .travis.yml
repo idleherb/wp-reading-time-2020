@@ -30,13 +30,13 @@ matrix:
       env: WP_VERSION=latest
     - php: 7.0
       env: WP_VERSION=latest
+  exclude:
     - php: 5.6
       env: WP_VERSION=4.5
     - php: 5.6
       env: WP_VERSION=latest
     - php: 5.6
       env: WP_VERSION=trunk
-  exclude:
     - php: 5.3
       env: WP_VERSION=latest
       dist: precise
