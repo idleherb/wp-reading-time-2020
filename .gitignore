@@ -26,3 +26,7 @@ node_modules/
 .DS_Store
 vendor/
 .vscode-terminal-init.sh
+*.env.json
+*.mp4
+e2e-tests/cypress/screenshots/
+e2e-tests/cypress/videos/
