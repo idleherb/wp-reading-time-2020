@@ -1,4 +1,12 @@
 {
-  "defaultCommandTimeout": 3000,
-  "userAgent" : "Cypress"
+  "defaultCommandTimeout": 5000,
+  "userAgent": "Cypress",
+  "chromeWebSecurity": false,
+  "fixturesFolder": false,
+  "pluginsFile": false,
+  "reporter": "junit",
+  "reporterOptions": {
+    "mochaFile": "results/my-test-output.xml",
+    "toConsole": true
+  }
 }

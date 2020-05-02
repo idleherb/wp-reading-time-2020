@@ -1,14 +1,16 @@
 {
   "name": "e2e-tests",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "e2e-tests",
+  "repository": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "e2e:docker-compose": "npm i && npx cypress install && ELECTRON_ENABLE_LOGGING=true npx cypress run"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "cypress": "^4.5.0"
+  "dependencies": {
+    "cypress": "^4.5.0",
+    "cypress-failed-log": "^2.6.2",
+    "cypress-log-to-output": "^1.0.8"
   }
 }
