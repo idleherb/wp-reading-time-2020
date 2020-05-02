@@ -1,5 +1,4 @@
 function login() {
-	console.log(Cypress.env('wp_user') + ' ' + Cypress.env('wp_password'));
 	cy.visit('/wp-login.php');
 	cy.get('#user_login')
 		.clear()
@@ -13,6 +12,8 @@ function login() {
 function activatePlugin() {
 	cy.visit('/wp-admin/plugins.php');
 	cy.get('#the-list')
+		.contains(/^Wp Reading Time 2020$/)
+		.siblings('.row-actions.visible')
 		.contains('Activate')
 		.click();
 	cy.contains('Plugin activated');
@@ -20,6 +21,8 @@ function activatePlugin() {
 
 function deactivatePlugin() {
 	cy.get('#the-list')
+		.contains(/^Wp Reading Time 2020$/)
+		.siblings('.row-actions.visible')
 		.contains('Deactivate')
 		.click();
 	cy.contains('Plugin deactivated');
@@ -27,19 +30,17 @@ function deactivatePlugin() {
 
 describe('admin panel', () => {
 	before(() => {
-		console.log('step 1');
 		login();
-		console.log('step 2');
 		activatePlugin();
-		console.log('step 3');
 	});
 	
 	after(deactivatePlugin);
 
-	it('displays the plugin in the admin section', () => {
+	it('displays the activated plugin in the admin section', () => {
 		cy.visit('/wp-admin/plugins.php');
-		console.log('step 4');
-		cy.contains('Wp Reading Time 2020');
+		cy.contains(/^Wp Reading Time 2020$/)
+			.parent()
+			.should('have.class', 'column-primary');
 	});
 
 	it.skip('displays the reading time for a post on the homepage', () => {

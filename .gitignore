@@ -30,3 +30,4 @@ vendor/
 *.mp4
 e2e-tests/cypress/screenshots/
 e2e-tests/cypress/videos/
+e2e-tests/results/

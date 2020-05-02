@@ -4,13 +4,15 @@
   "description": "e2e-tests",
   "repository": {},
   "scripts": {
-    "e2e:docker-compose": "npm i && npx cypress install && ELECTRON_ENABLE_LOGGING=true npx cypress run"
+    "test:e2e": "npm install && npx cypress install && ELECTRON_ENABLE_LOGGING=true npx cypress run"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^4.5.0",
     "cypress-failed-log": "^2.6.2",
     "cypress-log-to-output": "^1.0.8"
+  },
+  "devDependencies": {
+    "cypress": "^4.5.0"
   }
 }
