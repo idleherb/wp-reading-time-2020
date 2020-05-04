@@ -6,6 +6,6 @@
   "reporter": "junit",
   "reporterOptions": {
     "mochaFile": "results/e2e-output.xml",
-    "toConsole": true
+    "toConsole": false
   }
 }
