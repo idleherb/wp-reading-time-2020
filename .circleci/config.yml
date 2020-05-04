@@ -4,6 +4,7 @@ jobs:
   e2e_test:
     docker:
       - image: cimg/base:2020.01
+    steps:
       - run:
           name: copy e2e dir to cypress container and run tests
           command: |
