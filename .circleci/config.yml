@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: docker:latest
     steps:
+      - setup_remote_docker
       - checkout
       - run:
           name: copy e2e dir to cypress container and run tests
