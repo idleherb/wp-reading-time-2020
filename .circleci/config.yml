@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   e2e_test:
     docker:
-      - image: cimg/base:2020.01
+      - image: image: circleci/node:latest
     steps:
       - checkout
       - run:
