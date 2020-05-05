@@ -20,6 +20,7 @@ jobs:
       - run:
           name: Install composer
           command: |
+            cd e2e-tests
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "apt-get update && apt-get install curl && curl -s https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer"
       - run:
           name: Install WordPress Plugin
