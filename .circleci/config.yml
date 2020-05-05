@@ -29,14 +29,27 @@ jobs:
             docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && composer install"
       - run:
-          name: Run tests
+          name: Run unit tests
+          command: |
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpunit --log-junit ./junit.xml tests"
+      - run:
+          when: always
+          name: Fetch unit test results
+          command: |
+            mkdir -p unit-tests/xml
+            cd e2e-tests
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/junix.xml ../unit-tests/xml/junix.xml
+      - store_test_results:
+          path: unit-tests/xml
+      - run:
+          name: Run e2e tests
           command: |
             cd e2e-tests
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
       - run:
           when: always
-          name: Fetch test results
+          name: Fetch e2e test results
           command: |
             cd e2e-tests
             docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress .
