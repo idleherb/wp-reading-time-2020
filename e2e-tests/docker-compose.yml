@@ -56,8 +56,9 @@ services:
     working_dir: /e2e
     entrypoint: bash -c "npm run test:e2e"
     volumes:
-      - ./:/e2e
+      - e2e_data:/e2e
 
 volumes:
   db_data:
   wp_data:
+  e2e_data: {}
