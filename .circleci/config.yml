@@ -13,16 +13,16 @@ jobs:
             cd e2e-tests
             docker-compose up --no-start --force-recreate  --build
       - run:
+          name: Install Wordpress
+          command: |
+            cd e2e-tests
+            docker-compose run wordpress-cli
+      - run:
           name: Install WordPress Plugin
           command: |
             cd e2e-tests
             docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
-      - run:
-          name: Debug
-          command: |
-            cd e2e-tests
             echo '------------ ls /var/www/html/wp-content/plugins/my-plugin'
-            docker-compose run wordpress-cli
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "ls -haltr /var/www/html/wp-content/plugins/my-plugin"
       - run:
           name: Run tests
