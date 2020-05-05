@@ -22,7 +22,7 @@ jobs:
           command: |
             cd e2e-tests
             echo '------------ ls /var/www/html/wp-content/plugins/my-plugin'
-            docker-compose run -d wordpress
+            docker-compose run -d wordpress-cli
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "ls -haltr /var/www/html/wp-content/plugins/my-plugin"
       - run:
           name: Run tests
