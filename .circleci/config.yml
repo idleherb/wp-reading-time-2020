@@ -14,20 +14,16 @@ jobs:
             docker-compose up --no-start --force-recreate  --build
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
-      - run:
-          when: always
-          name: Store test results and artifacts
-          command: |
-            - store_artifacts:
-                path: cypress/videos
-            - store_artifacts:
-                path: cypress/screenshots
-            - store_artifacts:
-                path: cypress/xml
-            - store_artifacts:
-                path: cypress/logs
-            - store_test_results:
-                path: cypress/xml
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
+      - store_artifacts:
+          path: cypress/xml
+      - store_artifacts:
+          path: cypress/logs
+      - store_test_results:
+          path: cypress/xml
 
 workflows:
   version: 2
