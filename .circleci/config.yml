@@ -20,12 +20,14 @@ jobs:
           command: |
             pwd
             ls -haltr
+            ls -haltr e2e-tests
+            ls -haltr e2e-tests/cypress
+            ls -haltr e2e-tests/cypress/videos
+            ls -haltr e2e-tests/cypress/xml
       - store_artifacts:
           path: e2e-tests/cypress/videos
       - store_artifacts:
           path: e2e-tests/cypress/screenshots
-      - store_artifacts:
-          path: e2e-tests/cypress/logs
       - store_test_results:
           path: e2e-tests/cypress/xml
 
