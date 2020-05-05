@@ -16,19 +16,18 @@ jobs:
             docker-compose run e2e-test
       - run:
           when: always
-          name: foo
+          name: debug
           command: |
-            cd .
             pwd
             ls -haltr
       - store_artifacts:
-          path: cypress/videos
+          path: e2e-tests/cypress/videos
       - store_artifacts:
-          path: cypress/screenshots
+          path: e2e-tests/cypress/screenshots
       - store_artifacts:
-          path: cypress/logs
+          path: e2e-tests/cypress/logs
       - store_test_results:
-          path: cypress/xml
+          path: e2e-tests/cypress/xml
 
 workflows:
   version: 2
