@@ -14,14 +14,19 @@ jobs:
             docker-compose up --no-start --force-recreate  --build
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
+      - run:
+        name: foo
+        command: |
+          pwd
+          ls -haltr
       - store_artifacts:
-          path: e2e/cypress/videos
+          path: cypress/videos
       - store_artifacts:
-          path: e2e/cypress/screenshots
+          path: cypress/screenshots
       - store_artifacts:
-          path: e2e/cypress/logs
+          path: cypress/logs
       - store_test_results:
-          path: e2e/cypress/xml
+          path: cypress/xml
 
 workflows:
   version: 2
