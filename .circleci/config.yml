@@ -19,9 +19,7 @@ jobs:
           name: debug
           command: |
             cd e2e-tests
-            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress/videos cypress/
-            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress/screenshots cypress/
-            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress/xml cypress/
+            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress .
             echo '------------- ls .'
             ls -haltr
             echo '------------- ls cypress'
