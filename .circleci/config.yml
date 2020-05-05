@@ -18,12 +18,17 @@ jobs:
           when: always
           name: debug
           command: |
-            docker cp "$(docker-compose ps -q e2e-test)":/e2e e2e-tests
-            pwd
+            cd e2e-tests
+            docker cp "$(docker-compose ps -q e2e-test)":/e2e .
+            echo '------------- ls .'
             ls -haltr
+            echo '------------- ls e2e-tests'
             ls -haltr e2e-tests
+            echo '------------- ls e2e-tests/cypress'
             ls -haltr e2e-tests/cypress
+            echo '------------- ls e2e-tests/cypress/videos'
             ls -haltr e2e-tests/cypress/videos
+            echo '------------- ls e2e-tests/cypress/xml'
             ls -haltr e2e-tests/cypress/xml
       - store_artifacts:
           path: e2e-tests/cypress/videos
