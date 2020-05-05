@@ -15,10 +15,10 @@ jobs:
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
       - run:
-        name: foo
-        command: |
-          pwd
-          ls -haltr
+          name: foo
+          command: |
+            pwd
+            ls -haltr
       - store_artifacts:
           path: cypress/videos
       - store_artifacts:
