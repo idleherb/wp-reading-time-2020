@@ -18,6 +18,13 @@ jobs:
             cd e2e-tests
             docker-compose run wordpress-cli
       - run:
+          name: Install composer
+          command: |
+            apt-get update
+            apt-get install curl
+            curl -s https://getcomposer.org/installer | php
+            mv composer.phar /usr/local/bin/composer
+      - run:
           name: Install WordPress Plugin
           command: |
             cd e2e-tests
