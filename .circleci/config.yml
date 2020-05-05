@@ -8,26 +8,12 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
-          name: copy e2e dir to cypress container and run tests
+          name: Run tests
           command: |
             cd e2e-tests
             docker-compose up --no-start --force-recreate  --build
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
-      - run:
-          when: always
-          name: debug
-          command: |
-            cd e2e-tests
-            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress .
-            echo '------------- ls .'
-            ls -haltr
-            echo '------------- ls cypress'
-            ls -haltr cypress
-            echo '------------- ls cypress/videos'
-            ls -haltr cypress/videos
-            echo '------------- ls cypress/xml'
-            ls -haltr cypress/xml
       - store_artifacts:
           path: e2e-tests/cypress/videos
       - store_artifacts:

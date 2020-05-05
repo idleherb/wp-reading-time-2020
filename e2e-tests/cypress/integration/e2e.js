@@ -2,10 +2,10 @@ function login() {
 	cy.visit('/wp-login.php');
 	cy.get('#user_login')
 		.clear()
-		.type(Cypress.env('wp_user'));
+		.type('admin');
 	cy.get('#user_pass')
 		.clear()
-		.type(Cypress.env('wp_password'));
+		.type('secret');
 	cy.get('#wp-submit').click();
 }
 
