@@ -5,7 +5,7 @@
   "pluginsFile": false,
   "reporter": "junit",
   "reporterOptions": {
-    "mochaFile": "results/e2e-output.xml",
+    "mochaFile": "cypress/xml/output.xml",
     "toConsole": false
   }
 }
