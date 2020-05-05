@@ -18,6 +18,7 @@ jobs:
           when: always
           name: debug
           command: |
+            docker cp "$(docker-compose ps -q e2e-test)":/e2e e2e-tests
             pwd
             ls -haltr
             ls -haltr e2e-tests
