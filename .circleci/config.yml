@@ -24,6 +24,7 @@ jobs:
             docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
             echo '------------ ls /var/www/html/wp-content/plugins/my-plugin'
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "ls -haltr /var/www/html/wp-content/plugins/my-plugin"
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && composer install"
       - run:
           name: Run tests
           command: |
