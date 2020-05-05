@@ -8,10 +8,19 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
-          name: Run tests
+          name: Build images
           command: |
             cd e2e-tests
             docker-compose up --no-start --force-recreate  --build
+      - run:
+          name: Install WordPress Plugin
+          command: |
+            cd e2e-tests
+            docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
+      - run:
+          name: Run tests
+          command: |
+            cd e2e-tests
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
       - run:
