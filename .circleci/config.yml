@@ -18,8 +18,7 @@ jobs:
           when: always
           name: Fetch test results
           command: |
-            cd e2e-tests
-            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress .
+            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress e2e-tests/
       - store_artifacts:
           path: e2e-tests/cypress/videos
       - store_artifacts:
