@@ -5,6 +5,7 @@ services:
     image: mysql:5.7
     volumes:
       - db_data:/var/lib/mysql
+      - db_mysqld:/var/run/mysqld
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: somewordpress
@@ -28,6 +29,7 @@ services:
       WORDPRESS_DEBUG: 1
     volumes:
       - wp_data:/var/www/html
+      - db_mysqld:/var/run/mysqld
 
   wordpress-cli:
     depends_on:
@@ -59,5 +61,6 @@ services:
 
 volumes:
   db_data:
+  db_mysqld:
   wp_data:
   e2e_data: {}

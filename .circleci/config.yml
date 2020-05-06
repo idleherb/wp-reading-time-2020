@@ -32,8 +32,7 @@ jobs:
           name: Run unit tests
           command: |
             cd e2e-tests
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "apt-get install -y subversion mariadb-server-10.3"
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && bash bin/install-wp-tests.sh wordpress_test root 'somewordpress' wordpress latest"
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && bash bin/install-wp-tests.sh wordpress_test root 'somewordpress' db latest"
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpunit --log-junit ./junit.xml tests"
       - run:
           when: always
