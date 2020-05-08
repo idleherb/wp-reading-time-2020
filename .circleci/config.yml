@@ -35,7 +35,7 @@ jobs:
           command: |
             mkdir -p unit-tests/xml
             cd e2e-tests
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/junix.xml ../unit-tests/xml/junix.xml
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/junit.xml ../unit-tests/xml/junit.xml
       - store_test_results:
           path: unit-tests/xml
       - run:
