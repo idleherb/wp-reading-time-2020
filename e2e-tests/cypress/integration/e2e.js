@@ -38,7 +38,7 @@ describe('admin panel', () => {
 
 	it('displays the activated plugin in the admin section', () => {
 		cy.visit('/wp-admin/plugins.php');
-		cy.contains(/^Wp Reading Time 2020$/)
+		cy.contains(/^Wp Reading 2020$/)
 			.parent()
 			.should('have.class', 'column-primary');
 	});
