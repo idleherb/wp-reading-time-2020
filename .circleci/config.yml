@@ -28,7 +28,7 @@ jobs:
           command: |
             cd e2e-tests
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && bash bin/install-wp-tests.sh wordpress_test root 'somewordpress' db latest"
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ls -haltr && ./vendor/bin/phpunit --log-junit ./junit.xml tests"
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ls -haltr && ./vendor/bin/phpunit --log-junit ./junit.xml"
       - run:
           when: always
           name: Fetch unit test results
