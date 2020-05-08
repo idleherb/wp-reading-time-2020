@@ -27,7 +27,7 @@ jobs:
             name: Run linter
             command: |
               cd e2e-tests
-              docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=checkstyle > phpcs.output.xml"
+              docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=junit > phpcs.output.xml"
           - run:
             when: always
             name: Fetch linter results
