@@ -34,7 +34,7 @@ jobs:
           command: |
             mkdir -p test-results/phpcs
             cd e2e-tests
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs-results.xml ../test-results/phpcs/results.xml
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs-results.xml ../test-results/phpcs/results.xml || true
       - run:
           name: Run unit tests
           command: |
@@ -47,7 +47,7 @@ jobs:
           command: |
             mkdir -p test-results/phpunit
             cd e2e-tests
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-results.xml ../test-results/phpunit/results.xml
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-results.xml ../test-results/phpunit/results.xml || true
       - run:
           name: Run e2e tests
           command: |
@@ -63,7 +63,7 @@ jobs:
             cd e2e-tests
             docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress cypress-results
             mv cypress-results/screenshots cypress-results/videos -t ../artifacts/cypress/ || true
-            mv cypress-results/xml ../test-results/cypress
+            mv cypress-results/xml ../test-results/cypress || true
       - store_artifacts:
           path: artifacts/cypress/videos
       - store_artifacts:
