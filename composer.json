@@ -4,14 +4,14 @@
     "version": "0.0.1",
     "prefer-stable" : true,
     "require": {
-        "php": "^7.2"
+        "php": "^5.6 || ^7.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
         "wp-coding-standards/wpcs": "^2.2",
         "phpcompatibility/phpcompatibility-wp": "^2.1",
-        "phpunit/phpunit": "^7.5.20"
+        "phpunit/phpunit": "^5.7.20"
     },
     "autoload": {
         "psr-4": {
