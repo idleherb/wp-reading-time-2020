@@ -27,31 +27,27 @@ jobs:
           name: Run linter
           command: |
             cd e2e-tests
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=junit --report-file=phpcs.output.xml"
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=junit --report-file=phpcs-results.xml"
       - run:
           when: always
           name: Fetch linter results
           command: |
-            mkdir -p linter/xml
+            mkdir -p test-results/phpcs
             cd e2e-tests
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs.output.xml ../linter/xml/phpcs.output.xml
-      - store_test_results:
-          path: linter/xml
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs-results.xml ../test-results/phpcs/results.xml
       - run:
           name: Run unit tests
           command: |
             cd e2e-tests
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && bash bin/install-wp-tests.sh wordpress_test root 'somewordpress' db latest"
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpunit --log-junit ./junit.xml"
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpunit --log-junit phpunit-results.xml"
       - run:
           when: always
           name: Fetch unit test results
           command: |
-            mkdir -p unit-tests/xml
+            mkdir -p test-results/phpunit
             cd e2e-tests
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/junit.xml ../unit-tests/xml/junit.xml
-      - store_test_results:
-          path: unit-tests/xml
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-results.xml ../test-results/phpunit/results.xml
       - run:
           name: Run e2e tests
           command: |
@@ -62,14 +58,18 @@ jobs:
           when: always
           name: Fetch e2e test results
           command: |
+            mkdir -p artifacts/cypress
+            mkdir -p test-results/cypress
             cd e2e-tests
-            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress .
+            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress/ .
+            mv cypress/screenshots cypress/videos ../artifacts/cypress/
+            mv cypress/xml ../test-results/cypress/
       - store_artifacts:
-          path: e2e-tests/cypress/videos
+          path: artifacts/cypress/videos
       - store_artifacts:
-          path: e2e-tests/cypress/screenshots
+          path: artifacts/cypress/screenshots
       - store_test_results:
-          path: e2e-tests/cypress/xml
+          path: test-results
 
 workflows:
   version: 2
