@@ -65,9 +65,7 @@ jobs:
             mv cypress-results/screenshots cypress-results/videos -t ../artifacts/cypress/ || true
             mv cypress-results/xml ../test-results/cypress || true
       - store_artifacts:
-          path: artifacts/cypress/videos
-      - store_artifacts:
-          path: artifacts/cypress/screenshots
+          path: artifacts
       - store_test_results:
           path: test-results
 
