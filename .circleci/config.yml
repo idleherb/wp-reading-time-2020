@@ -28,12 +28,7 @@ jobs:
           command: |
             cd e2e-tests
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=junit --report-file=phpcs-results.xml"
-      - run:
-          when: always
-          name: Fetch linter results
-          command: |
-            mkdir -p test-results/phpcs
-            cd e2e-tests
+            mkdir -p ../test-results/phpcs
             docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs-results.xml ../test-results/phpcs/results.xml || true
       - run:
           name: Run unit tests
