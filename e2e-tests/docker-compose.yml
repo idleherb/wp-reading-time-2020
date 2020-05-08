@@ -51,7 +51,7 @@ services:
     volumes:
       - wp_data:/var/www/html
 
-  e2e-tests:
+  e2e-test:
     image: cypress/included:4.5.0
     depends_on:
       - wordpress-cli
