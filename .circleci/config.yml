@@ -11,17 +11,12 @@ jobs:
           name: Build images
           command: |
             cd e2e-tests
-            docker-compose up --no-start --force-recreate  --build
+            docker-compose up --build --no-start
       - run:
           name: Install Wordpress
           command: |
             cd e2e-tests
             docker-compose run wordpress-cli
-      - run:
-          name: Install composer
-          command: |
-            cd e2e-tests
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "apt-get update && apt-get install curl && curl -s https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer"
       - run:
           name: Install WordPress Plugin
           command: |
@@ -32,7 +27,6 @@ jobs:
           name: Run unit tests
           command: |
             cd e2e-tests
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "apt-get install -y subversion"
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && bash bin/install-wp-tests.sh wordpress_test root 'somewordpress' db latest"
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpunit --log-junit ./junit.xml tests"
       - run:
