@@ -61,7 +61,7 @@ jobs:
             mkdir -p artifacts/cypress
             mkdir -p test-results/cypress
             cd e2e-tests
-            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress cypress-results
+            docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress cypress-results || true
             mv cypress-results/screenshots cypress-results/videos -t ../artifacts/cypress/ || true
             mv cypress-results/xml ../test-results/cypress || true
       - store_artifacts:
