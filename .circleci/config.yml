@@ -35,6 +35,8 @@ jobs:
             mkdir -p linter/xml
             cd e2e-tests
             docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs.output.xml ../linter/xml/phpcs.output.xml
+      - store_test_results:
+          path: linter/xml
       - run:
           name: Run unit tests
           command: |
