@@ -23,19 +23,19 @@ jobs:
             cd e2e-tests
             docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && composer update --prefer-lowest && composer install"
-          - run:
-            name: Run linter
-            command: |
-              cd e2e-tests
-              docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=junit > phpcs.output.xml"
-          - run:
-            when: always
-            name: Fetch linter results
-            command: |
-              mkdir -p linter/xml
-              cd e2e-tests
-              docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs.output.xml ../linter/xml/phpcs.output.xml
-          - run:
+      - run:
+          name: Run linter
+          command: |
+            cd e2e-tests
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=junit > phpcs.output.xml"
+      - run:
+          when: always
+          name: Fetch linter results
+          command: |
+            mkdir -p linter/xml
+            cd e2e-tests
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs.output.xml ../linter/xml/phpcs.output.xml
+      - run:
           name: Run unit tests
           command: |
             cd e2e-tests
