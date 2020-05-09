@@ -46,6 +46,7 @@ jobs:
       - run:
           name: Debug
           command: |
+            cd e2e-tests
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "ls -haltr /var/www || true"
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "ls -haltr /var/www/html || true"
       - run:
