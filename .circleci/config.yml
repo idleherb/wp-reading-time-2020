@@ -120,6 +120,7 @@ jobs:
           name: Run e2e tests
           command: |
             cd e2e-tests
+            docker-compose build e2e-test
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
       - run:
