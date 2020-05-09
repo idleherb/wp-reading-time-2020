@@ -18,11 +18,11 @@ jobs:
             cd e2e-tests
             docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && composer update --prefer-lowest && composer install"
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/. /tmp/tmp_www
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/. /tmp/var_www_html
       - persist_to_workspace:
           root: /tmp
           paths:
-            - tmp_www
+            - var_www_html
 
   linter:
     docker:
@@ -42,7 +42,7 @@ jobs:
           command: |
             sleep 10
             cd e2e-tests
-            docker cp /tmp/tmp_www/. "$(docker-compose ps -q wordpress)":/var/www
+            docker cp /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
       - run:
           name: Run linter
           command: |
@@ -76,7 +76,7 @@ jobs:
           command: |
             sleep 10
             cd e2e-tests
-            docker cp /tmp/tmp_www/. "$(docker-compose ps -q wordpress)":/var/www
+            docker cp /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
       - run:
           name: Setup unit test environment
           command: |
@@ -115,7 +115,7 @@ jobs:
           command: |
             sleep 10
             cd e2e-tests
-            docker cp /tmp/tmp_www/. "$(docker-compose ps -q wordpress)":/var/www
+            docker cp /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
       - run:
           name: Run e2e tests
           command: |
@@ -143,12 +143,12 @@ workflows:
   build_and_test:
     jobs:
       - build
-      # - linter:
-      #     requires:
-      #       - build
-      # - unit_tests:
-      #     requires:
-      #       - linter
+      - linter:
+          requires:
+            - build
+      - unit_tests:
+          requires:
+            - linter
       - e2e_tests:
           requires:
             - build
