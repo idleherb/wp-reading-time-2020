@@ -62,6 +62,8 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
+      - attach_workspace:
+          at: /tmp
       - setup_remote_docker
       - checkout
       - run:
