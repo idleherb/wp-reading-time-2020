@@ -36,10 +36,11 @@ jobs:
           name: Start Wordpress
           command: |
             cd e2e-tests
-            docker-compose build wordpress
+            docker-compose up wordpress -d
       - run:
           name: Restore installation
           command: |
+            sleep 10
             cd e2e-tests
             docker cp /tmp/tmp_www "$(docker-compose ps -q wordpress)":/var/www
       - run:
