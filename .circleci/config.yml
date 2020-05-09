@@ -17,7 +17,10 @@ jobs:
           command: |
             cd e2e-tests
             docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && composer update --prefer-lowest && composer install"
+            docker exec -ti "$(docker-compose ps -q wordpress)" \
+              sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
+                composer update --prefer-lowest && \
+                composer install"
             docker cp "$(docker-compose ps -q wordpress)":/var/www/html/. /tmp/var_www_html
       - persist_to_workspace:
           root: /tmp
@@ -47,7 +50,9 @@ jobs:
           name: Run linter
           command: |
             cd e2e-tests
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=junit --report-file=phpcs-results.xml"
+            docker exec -ti "$(docker-compose ps -q wordpress)" \
+              sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
+                ./vendor/bin/phpcs --report=junit --report-file=phpcs-results.xml"
       - run:
           when: always
           name: Fetch linter results
@@ -81,12 +86,16 @@ jobs:
           name: Setup unit test environment
           command: |
             cd e2e-tests
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && bash bin/install-wp-tests.sh wordpress_test root 'somewordpress' db latest"
+            docker exec -ti "$(docker-compose ps -q wordpress)" \
+              sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
+                bash bin/install-wp-tests.sh wordpress_test root 'somewordpress' db latest"
       - run:
           name: Run unit tests
           command: |
             cd e2e-tests
-            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpunit --log-junit phpunit-results.xml"
+            docker exec -ti "$(docker-compose ps -q wordpress)" \
+              sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
+                ./vendor/bin/phpunit --log-junit phpunit-results.xml"
       - run:
           when: always
           name: Fetch unit test results
