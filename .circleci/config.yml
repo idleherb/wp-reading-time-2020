@@ -121,7 +121,7 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - linter
+      - linter:
           requires:
             - build
       # - unit_tests
