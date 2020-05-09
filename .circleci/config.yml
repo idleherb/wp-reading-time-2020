@@ -42,7 +42,7 @@ jobs:
           command: |
             sleep 10
             cd e2e-tests
-            docker cp /tmp/tmp_www "$(docker-compose ps -q wordpress)":/var/www
+            docker cp /tmp/tmp_www/. "$(docker-compose ps -q wordpress)":/var/www
       - run:
           name: Debug
           command: |
