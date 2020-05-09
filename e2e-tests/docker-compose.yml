@@ -53,6 +53,8 @@ services:
 
   e2e-test:
     image: cypress/included:4.5.0
+    depends_on:
+      - wordpress
     environment:
       - CYPRESS_baseUrl=http://wordpress
       - ELECTRON_ENABLE_LOGGING=true

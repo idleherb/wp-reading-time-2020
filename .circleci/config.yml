@@ -122,7 +122,7 @@ jobs:
             cd e2e-tests
             docker-compose build e2e-test
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
-            docker-compose up e2e-test
+            docker-compose run e2e-test
       - run:
           when: always
           name: Fetch e2e test results
