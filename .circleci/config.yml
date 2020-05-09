@@ -18,9 +18,9 @@ jobs:
             cd e2e-tests
             docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
             docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && composer update --prefer-lowest && composer install"
-            docker cp "$(docker-compose ps -q wordpress)":/var/www tmp_www
+            docker cp "$(docker-compose ps -q wordpress)":/var/www /tmp/tmp_www
       - persist_to_workspace:
-          root: e2e-tests
+          root: /tmp
           paths:
             - tmp_www
 
@@ -29,7 +29,7 @@ jobs:
       - image: cimg/base:2020.01
     steps:
       - attach_workspace:
-          at: e2e-tests/tmp_www
+          at: /tmp/tmp_www
       - setup_remote_docker
       - run:
           name: Start Wordpress
@@ -40,7 +40,7 @@ jobs:
           name: Restore installation
           command: |
             cd e2e-tests
-            docker cp e2e-tests/tmp_www "$(docker-compose ps -q wordpress)":/var/www
+            docker cp /tmp/tmp_www "$(docker-compose ps -q wordpress)":/var/www
       - run:
           name: Run linter
           command: |
