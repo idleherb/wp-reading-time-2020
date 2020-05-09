@@ -124,6 +124,8 @@ jobs:
           command: |
             sleep 10
             cd e2e-tests
+            docker exec -ti "$(docker-compose ps -q wordpress)" \
+              sh -c "rm -rf /var/www/html/*"
             docker cp /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
       - run:
           name: Run e2e tests
