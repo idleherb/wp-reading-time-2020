@@ -31,7 +31,6 @@ jobs:
       - attach_workspace:
           at: e2e-tests/tmp_www
       - setup_remote_docker
-      - checkout
       - run:
           name: Start Wordpress
           command: |
