@@ -46,8 +46,8 @@ jobs:
       - run:
           name: Debug
           command: |
-            ls -haltr /var/www || true
-            ls -haltr /var/www/html || true
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "ls -haltr /var/www || true"
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "ls -haltr /var/www/html || true"
       - run:
           name: Run linter
           command: |
