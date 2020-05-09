@@ -36,11 +36,11 @@ services:
       - db
       - wordpress
     image: wordpress:cli
+    user: xfs
     command: >
       /bin/sh -c '
         sleep 10; \
         wp core install \
-          --allow-root \
           --path="/var/www/html" \
           --url="wordpress" \
           --title="Plugin e2e tests" \
