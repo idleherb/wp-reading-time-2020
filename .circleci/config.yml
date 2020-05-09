@@ -130,6 +130,8 @@ jobs:
               sh -c "rm -rf /var/www/html/*"
             docker cp /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
             docker cp /tmp/var_lib_mysql/. "$(docker-compose ps -q db)":/var/lib/mysql
+            docker exec -ti "$(docker-compose ps -q db)" \
+              sh -c "chown -R mysql:mysql /var/lib/mysql/"
       - run:
           name: Run e2e tests
           command: |
