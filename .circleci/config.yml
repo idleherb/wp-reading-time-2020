@@ -1,7 +1,54 @@
 version: 2.1
 
 jobs:
-  e2e_test:
+  build:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Install Wordpress
+          command: |
+            cd e2e-tests
+            docker-compose up wordpress-cli
+      - run:
+          name: Install WordPress Plugin
+          command: |
+            cd e2e-tests
+            docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && composer update --prefer-lowest && composer install"
+            docker cp "$(docker-compose ps -q wordpress)":/var/www tmp_www
+      - persist_to_workspace:
+          root: e2e-tests
+          paths:
+            - tmp_www
+
+  linter:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - attach_workspace:
+          at: e2e-tests/tmp_www
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Start Wordpress
+          command: |
+            cd e2e-tests
+            docker-compose up wordpress
+      - run:
+          name: Restore installation
+          command: |
+            cd e2e-tests
+            docker cp e2e-tests/tmp_www "$(docker-compose ps -q wordpress)":/var/www
+      - run:
+          name: Run linter
+          command: |
+            cd e2e-tests
+            docker exec -ti "$(docker-compose ps -q wordpress)" sh -c "cd /var/www/html/wp-content/plugins/my-plugin && ./vendor/bin/phpcs --report=junit --report-file=phpcs-results.xml"
+
+  e2e_tests:
     docker:
       - image: cimg/base:2020.01
     steps:
@@ -73,4 +120,13 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - e2e_test
+      - build
+      - linter
+          requires:
+            - build
+      # - unit_tests
+      #     requires:
+      #       - linter
+      # - e2e_tests
+      #     requires:
+      #       - unit_tests
