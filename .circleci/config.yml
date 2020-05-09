@@ -22,10 +22,12 @@ jobs:
                 composer update --prefer-lowest && \
                 composer install"
             docker cp "$(docker-compose ps -q wordpress)":/var/www/html/. /tmp/var_www_html
+            docker cp "$(docker-compose ps -q db)":/var/lib/mysql/. /tmp/var_lib_mysql
       - persist_to_workspace:
           root: /tmp
           paths:
             - var_www_html
+            - var_lib_mysql
 
   linter:
     docker:
@@ -127,6 +129,7 @@ jobs:
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "rm -rf /var/www/html/*"
             docker cp -a /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
+            docker cp -a /tmp/var_lib_mysql/. "$(docker-compose ps -q db)":/var/lib/mysql
       - run:
           name: Run e2e tests
           command: |
