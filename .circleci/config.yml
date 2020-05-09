@@ -44,6 +44,11 @@ jobs:
             cd e2e-tests
             docker cp /tmp/tmp_www "$(docker-compose ps -q wordpress)":/var/www
       - run:
+          name: Debug
+          command: |
+            ls -haltr /var/www || true
+            ls -haltr /var/www/html || true
+      - run:
           name: Run linter
           command: |
             cd e2e-tests
