@@ -53,6 +53,16 @@ services:
 
   e2e-test:
     image: cypress/included:4.5.0
+    environment:
+      - CYPRESS_baseUrl=http://wordpress
+      - ELECTRON_ENABLE_LOGGING=true
+    working_dir: /e2e
+    entrypoint: bash -c "npm run test:e2e"
+    volumes:
+      - e2e_data:/e2e
+
+  e2e-test-standalone:
+    image: cypress/included:4.5.0
     depends_on:
       - wordpress-cli
     environment:
