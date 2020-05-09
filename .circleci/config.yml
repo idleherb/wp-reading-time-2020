@@ -151,9 +151,9 @@ workflows:
       - linter:
           requires:
             - build
-      - unit_tests
+      - unit_tests:
           requires:
             - linter
-      # - e2e_tests
+      # - e2e_tests:
       #     requires:
       #       - unit_tests
