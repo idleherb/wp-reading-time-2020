@@ -36,7 +36,7 @@ jobs:
           name: Start Wordpress
           command: |
             cd e2e-tests
-            docker-compose up wordpress
+            docker-compose build wordpress
       - run:
           name: Restore installation
           command: |
