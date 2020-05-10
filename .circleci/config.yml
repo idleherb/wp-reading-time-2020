@@ -126,6 +126,7 @@ jobs:
           command: |
             sleep 10
             cd e2e-tests
+            echo "###### Restore installation ######"
             docker cp /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
             docker cp /tmp/var_lib_mysql/. "$(docker-compose ps -q db)":/var/lib/mysql
             docker exec -ti "$(docker-compose ps -q db)" \
@@ -134,6 +135,7 @@ jobs:
           name: Run e2e tests
           command: |
             cd e2e-tests
+            echo "###### Run e2e tests ######""
             docker-compose up --no-start e2e-test
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
