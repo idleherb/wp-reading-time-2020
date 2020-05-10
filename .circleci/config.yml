@@ -120,11 +120,10 @@ jobs:
           name: Start Wordpress
           command: |
             cd e2e-tests
-            docker-compose up -d wordpress
+            docker-compose up --no-start wordpress
       - run:
           name: Restore installation
           command: |
-            sleep 10
             cd e2e-tests
             echo "###### Restore installation ######"
             docker cp /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
