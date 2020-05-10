@@ -131,9 +131,13 @@ jobs:
             docker cp /tmp/var_lib_mysql/. "$(docker-compose ps -q db)":/var/lib/mysql
             docker exec -ti "$(docker-compose ps -q db)" \
               sh -c "chown -R mysql:mysql /var/lib/mysql/"
+            docker-compose down wordpress
+            docker-compose down db
+            docker-compose up -d wordpress
       - run:
           name: Run e2e tests
           command: |
+            sleep 10
             cd e2e-tests
             docker-compose up --no-start e2e-test
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
