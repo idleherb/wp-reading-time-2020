@@ -19,7 +19,7 @@ commands:
       - run:
           name: Debug
           command: |
-            docker images ls
+            docker images
       - run:
           name: Restore cached WordPress image
           command: |
@@ -57,7 +57,7 @@ jobs:
       - run:
           name: Debug
           command: |
-            docker images ls
+            docker images
       - run:
           name: Store WordPress image in cache
           command: |
