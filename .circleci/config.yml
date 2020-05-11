@@ -37,16 +37,17 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
+          name: Restore installation
+          command: |
+            cd e2e-tests
+            docker-compose up -d wp-and-db-storage
+            docker cp /storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+      - run:
           name: Start Wordpress
           command: |
             cd e2e-tests
             docker-compose up -d wordpress
-      - run:
-          name: Restore installation
-          command: |
             sleep 10
-            cd e2e-tests
-            docker cp /storage/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
       - run:
           name: Run linter
           command: |
@@ -73,16 +74,17 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
+          name: Restore installation
+          command: |
+            cd e2e-tests
+            docker-compose up -d wp-and-db-storage
+            docker cp /storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+      - run:
           name: Start Wordpress
           command: |
             cd e2e-tests
             docker-compose up -d wordpress
-      - run:
-          name: Restore installation
-          command: |
             sleep 10
-            cd e2e-tests
-            docker cp /storage/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
       - run:
           name: Setup unit test environment
           command: |
@@ -160,12 +162,12 @@ workflows:
   build_and_test:
     jobs:
       - build
-      # - linter:
-      #     requires:
-      #       - build
-      # - unit_tests:
-      #     requires:
-      #       - linter
-      - e2e_tests:
+      - linter:
           requires:
             - build
+      - unit_tests:
+          requires:
+            - linter
+      - e2e_tests:
+          requires:
+            - unit_tests
