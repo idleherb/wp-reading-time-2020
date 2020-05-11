@@ -53,14 +53,14 @@ jobs:
       - run:
           name: Debug
           command: |
-            docker images --format "{{.ID}}" --filter "reference=*_wordpress"
+            docker images --format "{{.Repository}}" --filter "reference=*_wordpress"
       - run:
           name: Store WordPress image in cache
           command: |
             mkdir -p /tmp/workspace/cache
             docker save \
               -o /tmp/workspace/cache/wordpress.tar \
-              '$(docker images --format "{{.ID}}" --filter "reference=*_wordpress")'
+              '$(docker images --format "{{.Repository}}" --filter "reference=*_wordpress")'
       - persist_to_workspace:
           root: /tmp/workspace/storage
           paths:
