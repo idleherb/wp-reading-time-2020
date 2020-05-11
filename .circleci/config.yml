@@ -15,10 +15,11 @@ commands:
             docker cp /tmp/workspace/storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
       - restore_cache:
           keys:
-            - docker-wordpress-image-{{ .Revision }}
+            - docker-images-{{ .Revision }}
       - run:
-          name: Restore cached WordPress image
+          name: Restore cached images
           command: |
+            docker load < /tmp/workspace/cache/db.tar
             docker load < /tmp/workspace/cache/wordpress.tar
       - run:
           name: Start WordPress
@@ -61,6 +62,9 @@ jobs:
             docker save \
               -o /tmp/workspace/cache/wordpress.tar \
               "$(docker images --format '{{.Repository}}' --filter 'reference=*_wordpress'):latest"
+            docker save \
+              -o /tmp/workspace/cache/db.tar \
+              "$(docker images --format '{{.Repository}}' --filter 'reference=mysql')"
       - persist_to_workspace:
           root: /tmp/workspace/storage
           paths:
@@ -69,7 +73,7 @@ jobs:
       - save_cache:
           paths:
             - /tmp/workspace/cache
-          key: docker-wordpress-image-{{ .Revision }}
+          key: docker-images-{{ .Revision }}
 
   linter:
     docker:
