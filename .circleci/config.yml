@@ -13,6 +13,13 @@ commands:
           command: |
             docker-compose up -d wp-and-db-storage
             docker cp /tmp/workspace/storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+      - restore_cache:
+          keys:
+            - docker-wordpress-image-{{ .Revision }}
+      - run:
+          name: Restore cached WordPress image
+          command: |
+            docker load < /tmp/workspace/cache/wordpress.tar
       - run:
           name: Start WordPress
           command: |
@@ -43,11 +50,22 @@ jobs:
           command: |
             mkdir -p /tmp/workspace
             docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace/storage
+      - run:
+          name: Store WordPress image in cache
+          command: |
+            mkdir -p /tmp/workspace/cache
+            docker save \
+              -o /tmp/workspace/cache/wordpress.tar \
+              "$(docker-compose ps -q wordpress)"
       - persist_to_workspace:
           root: /tmp/workspace/storage
           paths:
             - var_www_html
             - var_lib_mysql
+      - save_cache:
+          paths:
+            - /tmp/workspace/cache
+          key: docker-wordpress-image-{{ .Revision }}
 
   linter:
     docker:
@@ -130,12 +148,12 @@ workflows:
   build_and_test:
     jobs:
       - build
-      # - linter:
-      #     requires:
-      #       - build
-      # - unit_tests:
-      #     requires:
-      #       - linter
-      - e2e_tests:
+      - linter:
           requires:
             - build
+      - unit_tests:
+          requires:
+            - linter
+      - e2e_tests:
+          requires:
+            - unit_tests
