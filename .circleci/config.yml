@@ -60,7 +60,7 @@ jobs:
             mkdir -p /tmp/workspace/cache
             docker save \
               -o /tmp/workspace/cache/wordpress.tar \
-              '$(docker images --format "{{.Repository}}" --filter "reference=*_wordpress"):latest'
+              "$(docker images --format '{{.Repository}}' --filter 'reference=*_wordpress'):latest"
       - persist_to_workspace:
           root: /tmp/workspace/storage
           paths:
