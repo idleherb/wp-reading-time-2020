@@ -55,6 +55,10 @@ jobs:
             mkdir -p /tmp/workspace
             docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace/storage
       - run:
+          name: Debug
+          command: |
+            docker images ls
+      - run:
           name: Store WordPress image in cache
           command: |
             mkdir -p /tmp/workspace/cache
