@@ -38,6 +38,10 @@ jobs:
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
                 composer update --prefer-lowest && \
                 composer install"
+      - run:
+          name: Fetch installation data
+          command: |
+            mkdir -p /tmp/workspace
             docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace/storage
       - persist_to_workspace:
           root: /tmp/workspace/storage
