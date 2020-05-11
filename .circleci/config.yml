@@ -17,6 +17,10 @@ commands:
           keys:
             - docker-wordpress-image-{{ .Revision }}
       - run:
+          name: Debug
+          command: |
+            docker images ls
+      - run:
           name: Restore cached WordPress image
           command: |
             docker load < /tmp/workspace/cache/wordpress.tar
