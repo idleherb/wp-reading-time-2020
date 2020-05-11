@@ -1,5 +1,26 @@
 version: 2.1
 
+commands:
+  restore_and_start_wp:
+    description: Restore installation and start WordPress
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Restore installation
+          command: |
+            cd e2e-tests
+            docker-compose up -d wp-and-db-storage
+            docker cp /tmp/workspace/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+      - run:
+          name: Start WordPress
+          command: |
+            cd e2e-tests
+            docker-compose up -d wordpress
+            sleep 10
+
 jobs:
   build:
     docker:
@@ -8,7 +29,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
-          name: Install Wordpress
+          name: Install WordPress
           command: |
             cd e2e-tests
             docker-compose up wordpress-cli
@@ -32,22 +53,7 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - setup_remote_docker
-      - checkout
-      - run:
-          name: Restore installation
-          command: |
-            cd e2e-tests
-            docker-compose up -d wp-and-db-storage
-            docker cp /tmp/workspace/. "$(docker-compose ps -q wp-and-db-storage)":/storage
-      - run:
-          name: Start Wordpress
-          command: |
-            cd e2e-tests
-            docker-compose up -d wordpress
-            sleep 10
+      - restore_and_start_wp
       - run:
           name: Run linter
           command: |
@@ -69,22 +75,7 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - setup_remote_docker
-      - checkout
-      - run:
-          name: Restore installation
-          command: |
-            cd e2e-tests
-            docker-compose up -d wp-and-db-storage
-            docker cp /tmp/workspace/. "$(docker-compose ps -q wp-and-db-storage)":/storage
-      - run:
-          name: Start Wordpress
-          command: |
-            cd e2e-tests
-            docker-compose up -d wordpress
-            sleep 10
+      - restore_and_start_wp
       - run:
           name: Setup unit test environment
           command: |
@@ -113,22 +104,7 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - setup_remote_docker
-      - checkout
-      - run:
-          name: Restore installation
-          command: |
-            cd e2e-tests
-            docker-compose up -d wp-and-db-storage
-            docker cp /tmp/workspace/. "$(docker-compose ps -q wp-and-db-storage)":/storage
-      - run:
-          name: Start Wordpress
-          command: |
-            cd e2e-tests
-            docker-compose up -d wordpress
-            sleep 10
+      - restore_and_start_wp
       - run:
           name: Run e2e tests
           command: |
@@ -148,7 +124,7 @@ jobs:
             mv cypress-results/xml ../test-results/cypress || true
       - run:
           when: always
-          name: Wordpress and db logs
+          name: WordPress and db logs
           command: |
             cd e2e-tests
             docker-compose logs wordpress db
