@@ -17,10 +17,6 @@ commands:
           keys:
             - docker-wordpress-image-{{ .Revision }}
       - run:
-          name: Debug
-          command: |
-            docker images
-      - run:
           name: Restore cached WordPress image
           command: |
             docker load < /tmp/workspace/cache/wordpress.tar
@@ -57,14 +53,14 @@ jobs:
       - run:
           name: Debug
           command: |
-            docker images
+            docker images --format "{{.ID}}" --filter "reference=*_wordpress"
       - run:
           name: Store WordPress image in cache
           command: |
             mkdir -p /tmp/workspace/cache
             docker save \
               -o /tmp/workspace/cache/wordpress.tar \
-              "$(docker-compose ps -q wordpress)"
+              "$(docker images --format \"{{.ID}}\" --filter \"reference=*_wordpress\")"
       - persist_to_workspace:
           root: /tmp/workspace/storage
           paths:
