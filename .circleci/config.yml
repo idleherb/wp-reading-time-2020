@@ -21,8 +21,7 @@ jobs:
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
                 composer update --prefer-lowest && \
                 composer install"
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/. /tmp/var_www_html
-            docker cp "$(docker-compose ps -q db)":/var/lib/mysql/. /tmp/var_lib_mysql
+            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp
       - persist_to_workspace:
           root: /tmp
           paths:
@@ -117,26 +116,20 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
-          name: Start Wordpress
-          command: |
-            cd e2e-tests
-            docker-compose up -d db
-            sleep 10
-            docker-compose up --no-start wordpress
-      - run:
           name: Restore installation
           command: |
             cd e2e-tests
-            docker cp /tmp/var_www_html/. "$(docker-compose ps -q wordpress)":/var/www/html
-            docker cp /tmp/var_lib_mysql/. "$(docker-compose ps -q db)":/var/lib/mysql
-            docker exec -ti "$(docker-compose ps -q db)" \
-              sh -c "chown -R mysql:mysql /var/lib/mysql/"
-            docker-compose down
+            docker-compose up -d wp-and-db-storage
+            docker cp /tmp/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+      - run:
+          name: Start Wordpress
+          command: |
+            cd e2e-tests
             docker-compose up -d wordpress
+            sleep 10
       - run:
           name: Run e2e tests
           command: |
-            sleep 10
             cd e2e-tests
             docker-compose up --no-start e2e-test
             docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e

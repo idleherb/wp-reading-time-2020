@@ -1,7 +1,15 @@
 version: '3.6'
 
 services:
+  wp-and-db-storage:
+    image: alpine:3.11.6
+    volumes:
+      - db_data:/storage/var_lib_mysql
+      - wp_data:/storage/var_www_html
+
   db:
+    depends_on:
+      - wp-and-db-storage
     image: mysql:5.7
     volumes:
       - db_data:/var/lib/mysql
@@ -33,7 +41,6 @@ services:
 
   wordpress-cli:
     depends_on:
-      - db
       - wordpress
     image: wordpress:cli
     user: xfs
@@ -65,5 +72,5 @@ services:
 
 volumes:
   db_data:
+  e2e_data:
   wp_data:
-  e2e_data: {}
