@@ -5,19 +5,17 @@ commands:
     description: Restore installation and start WordPress
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: /tmp/workspace/storage
       - setup_remote_docker
       - checkout
       - run:
           name: Restore installation
           command: |
-            cd e2e-tests
             docker-compose up -d wp-and-db-storage
-            docker cp /tmp/workspace/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+            docker cp /tmp/workspace/storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
       - run:
           name: Start WordPress
           command: |
-            cd e2e-tests
             docker-compose up -d wordpress
             sleep 10
 
@@ -31,20 +29,18 @@ jobs:
       - run:
           name: Install WordPress
           command: |
-            cd e2e-tests
             docker-compose up wordpress-cli
       - run:
           name: Install WordPress Plugin
           command: |
-            cd e2e-tests
-            docker cp ../ "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
+            docker cp . "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
                 composer update --prefer-lowest && \
                 composer install"
-            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace
+            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace/storage
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: /tmp/workspace/storage
           paths:
             - var_www_html
             - var_lib_mysql
@@ -57,7 +53,6 @@ jobs:
       - run:
           name: Run linter
           command: |
-            cd e2e-tests
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
                 ./vendor/bin/phpcs --report=junit --report-file=phpcs-results.xml"
@@ -65,11 +60,10 @@ jobs:
           when: always
           name: Fetch linter results
           command: |
-            mkdir -p test-results/phpcs
-            cd e2e-tests
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs-results.xml ../test-results/phpcs/results.xml || true
+            mkdir -p /tmp/workspace/test-results/phpcs
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs-results.xml /tmp/workspace/test-results/phpcs/results.xml || true
       - store_test_results:
-          path: test-results/phpcs
+          path: /tmp/workspace/test-results/phpcs
 
   unit_tests:
     docker:
@@ -79,14 +73,12 @@ jobs:
       - run:
           name: Setup unit test environment
           command: |
-            cd e2e-tests
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
                 bash bin/install-wp-tests.sh wordpress_test root 'somewordpress' db latest"
       - run:
           name: Run unit tests
           command: |
-            cd e2e-tests
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
                 ./vendor/bin/phpunit --log-junit phpunit-results.xml"
@@ -94,11 +86,10 @@ jobs:
           when: always
           name: Fetch unit test results
           command: |
-            mkdir -p test-results/phpunit
-            cd e2e-tests
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-results.xml ../test-results/phpunit/results.xml || true
+            mkdir -p /tmp/workspace/test-results/phpunit
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-results.xml /tmp/workspace/test-results/phpunit/results.xml || true
       - store_test_results:
-          path: test-results/phpunit
+          path: /tmp/workspace/test-results/phpunit
 
   e2e_tests:
     docker:
@@ -108,30 +99,27 @@ jobs:
       - run:
           name: Run e2e tests
           command: |
-            cd e2e-tests
             docker-compose up --no-start e2e-test
-            docker cp ./ "$(docker-compose ps -q e2e-test)":/e2e
+            docker cp ./e2e-tests "$(docker-compose ps -q e2e-test)":/e2e
             docker-compose run e2e-test
       - run:
           when: always
           name: Fetch e2e test results
           command: |
-            mkdir -p artifacts/cypress
-            mkdir -p test-results/cypress
-            cd e2e-tests
+            mkdir -p /tmp/workspace/artifacts/cypress
+            mkdir -p /tmp/workspace/test-results/cypress
             docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress cypress-results || true
-            mv cypress-results/screenshots cypress-results/videos -t ../artifacts/cypress/ || true
-            mv cypress-results/xml ../test-results/cypress || true
+            mv cypress-results/screenshots cypress-results/videos -t /tmp/workspace/artifacts/cypress/ || true
+            mv cypress-results/xml /tmp/workspace/test-results/cypress || true
       - run:
           when: always
           name: WordPress and db logs
           command: |
-            cd e2e-tests
             docker-compose logs wordpress db
       - store_artifacts:
-          path: artifacts
+          path: /tmp/workspace/artifacts
       - store_test_results:
-          path: test-results/cypress
+          path: /tmp/workspace/test-results/cypress
 
 workflows:
   version: 2
