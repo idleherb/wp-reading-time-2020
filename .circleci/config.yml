@@ -21,9 +21,9 @@ jobs:
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
                 composer update --prefer-lowest && \
                 composer install"
-            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /storage
+            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace
       - persist_to_workspace:
-          root: /storage
+          root: /tmp/workspace
           paths:
             - var_www_html
             - var_lib_mysql
@@ -33,7 +33,7 @@ jobs:
       - image: cimg/base:2020.01
     steps:
       - attach_workspace:
-          at: /storage
+          at: /tmp/workspace
       - setup_remote_docker
       - checkout
       - run:
@@ -41,7 +41,7 @@ jobs:
           command: |
             cd e2e-tests
             docker-compose up -d wp-and-db-storage
-            docker cp /storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+            docker cp /tmp/workspace/. "$(docker-compose ps -q wp-and-db-storage)":/storage
       - run:
           name: Start Wordpress
           command: |
@@ -70,7 +70,7 @@ jobs:
       - image: cimg/base:2020.01
     steps:
       - attach_workspace:
-          at: /storage
+          at: /tmp/workspace
       - setup_remote_docker
       - checkout
       - run:
@@ -78,7 +78,7 @@ jobs:
           command: |
             cd e2e-tests
             docker-compose up -d wp-and-db-storage
-            docker cp /storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+            docker cp /tmp/workspace/. "$(docker-compose ps -q wp-and-db-storage)":/storage
       - run:
           name: Start Wordpress
           command: |
@@ -114,7 +114,7 @@ jobs:
       - image: cimg/base:2020.01
     steps:
       - attach_workspace:
-          at: /storage
+          at: /tmp/workspace
       - setup_remote_docker
       - checkout
       - run:
@@ -122,7 +122,7 @@ jobs:
           command: |
             cd e2e-tests
             docker-compose up -d wp-and-db-storage
-            docker cp /storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+            docker cp /tmp/workspace/. "$(docker-compose ps -q wp-and-db-storage)":/storage
       - run:
           name: Start Wordpress
           command: |
