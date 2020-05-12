@@ -18,14 +18,14 @@ commands:
         default: "5.4.1"
     steps:
       - attach_workspace:
-          at: /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/storage
+          at: /tmp/workspace/storage
       - setup_remote_docker
       - checkout
       - run:
           name: Restore installation
           command: |
             docker-compose up -d wp-and-db-storage
-            docker cp /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+            docker cp /tmp/workspace/storage/wp<< parameters.wp-version >>-php<< parameters.php-version >>/. "$(docker-compose ps -q wp-and-db-storage)":/storage
       - run:
           name: Start WordPress
           environment:
@@ -74,13 +74,13 @@ jobs:
       - run:
           name: Fetch installation data
           command: |
-            mkdir -p /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>
-            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/storage
+            mkdir -p /tmp/workspace/storage
+            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace/storage/wp<< parameters.wp-version >>-php<< parameters.php-version >>
       - persist_to_workspace:
-          root: /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/storage
+          root: /tmp/workspace/storage
           paths:
-            - var_www_html
-            - var_lib_mysql
+            - wp<< parameters.wp-version >>-php<< parameters.php-version >>/var_www_html
+            - wp<< parameters.wp-version >>-php<< parameters.php-version >>/var_lib_mysql
 
   linter:
     parameters:
