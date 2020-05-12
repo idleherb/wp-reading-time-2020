@@ -4,55 +4,55 @@ commands:
   restore_and_start_wp:
     description: Restore installation and start WordPress
     parameters:
-      mysql-version:
+      mysql_version:
         type: string
         default: "5.6"
-      php-version:
+      php_version:
         type: string
         default: "7.3"
-      php-unit-version:
+      php_unit_version:
         type: string
         default: "5.7.20"
-      wp-version:
+      wp_version:
         type: string
         default: "5.4.1"
     steps:
       - attach_workspace:
-          at: /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/storage
+          at: /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/storage
       - setup_remote_docker
       - checkout
       - run:
           name: Restore installation
           command: |
             docker-compose up -d wp-and-db-storage
-            docker cp /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
+            docker cp /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
       - run:
           name: Start WordPress
           environment:
-            - MYSQL_VERSION: << parameters.mysql-version >>
-            - PHP_VERSION: << parameters.php-version >>
-            - PHP_UNIT_VERSION: << parameters.php-unit-version >>
-            - WP_VERSION: << parameters.wp-version >>
+            - MYSQL_VERSION: << parameters.mysql_version >>
+            - PHP_VERSION: << parameters.php_version >>
+            - PHP_UNIT_VERSION: << parameters.php_unit_version >>
+            - WP_VERSION: << parameters.wp_version >>
           command: |
             docker-compose up -d wordpress
             sleep 10
 
 jobs:
   build:
-    docker:
-      - image: cimg/base:2020.01
     parameters:
-      php-version:
+      php_version:
         type: string
         default: "7.3"
-      wp-version:
+      wp_version:
         type: "string"
         default: "5.4.1"
+    docker:
+      - image: cimg/base:2020.01
     environment:
       - MYSQL_VERSION: "5.6"
-      - PHP_VERSION: << parameters.php-version >>
+      - PHP_VERSION: << parameters.php_version >>
       - PHP_UNIT_VERSION: "5.7.20"
-      - WP_VERSION: << parameters.wp-version >>
+      - WP_VERSION: << parameters.wp_version >>
     steps:
       - setup_remote_docker
       - checkout
@@ -74,28 +74,28 @@ jobs:
       - run:
           name: Fetch installation data
           command: |
-            mkdir -p /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>
-            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/storage
+            mkdir -p /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>
+            docker cp "$(docker-compose ps -q wp-and-db-storage)":/storage/. /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/storage
       - persist_to_workspace:
-          root: /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/storage
+          root: /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/storage
           paths:
             - var_www_html
             - var_lib_mysql
 
   linter:
-    docker:
-      - image: cimg/base:2020.01
     parameters:
-      php-version:
+      php_version:
         type: string
         default: "7.3"
-      wp-version:
+      wp_version:
         type: "string"
         default: "5.4.1"
+    docker:
+      - image: cimg/base:2020.01
     steps:
       - restore_and_start_wp:
-          php-version: << matrix.php-version >>
-          wp-version: << matrix.wp-version >>
+          php_version: << matrix.php_version >>
+          wp_version: << matrix.wp_version >>
       - run:
           name: Run linter
           command: |
@@ -106,25 +106,25 @@ jobs:
           when: always
           name: Fetch linter results
           command: |
-            mkdir -p /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/phpcs
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs-results.xml /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/phpcs/results.xml || true
+            mkdir -p /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/phpcs
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpcs-results.xml /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/phpcs/results.xml || true
       - store_test_results:
-          path: /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/phpcs
+          path: /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/phpcs
 
   unit_tests:
-    docker:
-      - image: cimg/base:2020.01
     parameters:
-      php-version:
+      php_version:
         type: string
         default: "7.3"
-      wp-version:
+      wp_version:
         type: "string"
         default: "5.4.1"
+    docker:
+      - image: cimg/base:2020.01
     steps:
       - restore_and_start_wp:
-          php-version: << matrix.php-version >>
-          wp-version: << matrix.wp-version >>
+          php_version: << matrix.php_version >>
+          wp_version: << matrix.wp_version >>
       - run:
           name: Setup unit test environment
           command: |
@@ -141,19 +141,19 @@ jobs:
           when: always
           name: Fetch unit test results
           command: |
-            mkdir -p /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/phpunit
-            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-results.xml /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/phpunit/results.xml || true
+            mkdir -p /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/phpunit
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-results.xml /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/phpunit/results.xml || true
       - store_test_results:
-          path: /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/phpunit
+          path: /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/phpunit
 
   e2e_tests:
     docker:
       - image: cimg/base:2020.01
     parameters:
-      php-version:
+      php_version:
         type: string
         default: "7.3"
-      wp-version:
+      wp_version:
         type: "string"
         default: "5.4.1"
     steps:
@@ -162,9 +162,9 @@ jobs:
           name: Run e2e tests
           environment:
             - MYSQL_VERSION: 5.6
-            - PHP_VERSION: << parameters.php-version >>
+            - PHP_VERSION: << parameters.php_version >>
             - PHP_UNIT_VERSION: 5.7.20
-            - WP_VERSION: << parameters.wp-version >>
+            - WP_VERSION: << parameters.wp_version >>
           command: |
             docker-compose up --no-start e2e-test
             docker cp ./e2e-tests/. "$(docker-compose ps -q e2e-test)":/e2e
@@ -173,35 +173,35 @@ jobs:
           when: always
           name: Fetch e2e test results
           command: |
-            mkdir -p /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/artifacts/cypress
-            mkdir -p /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/cypress
+            mkdir -p /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/artifacts/cypress
+            mkdir -p /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/cypress
             docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress cypress-results || true
-            mv cypress-results/screenshots cypress-results/videos -t /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/artifacts/cypress/ || true
-            mv cypress-results/xml /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/cypress || true
+            mv cypress-results/screenshots cypress-results/videos -t /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/artifacts/cypress/ || true
+            mv cypress-results/xml /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/cypress || true
       - store_artifacts:
-          path: /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/artifacts
+          path: /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/artifacts
       - store_test_results:
-          path: /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/cypress
+          path: /tmp/workspace/wp<< matrix.wp_version >>-php<< matrix.php_version >>/test-results/cypress
 
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build:
-          name: build-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+          name: build-wp<< matrix.wp_version >>-php<< matrix.php_version >>
           matrix:
             parameters:
-              wp-version: ["4.9", "5.4.1"]
-              php-version: ["5.6", "7.0", "7.1", "7.2", "7.3"]
+              wp_version: ["4.9", "5.4.1"]
+              php_version: ["5.6", "7.0", "7.1", "7.2", "7.3"]
             exclude:
-              - wp-version: "5.4.1"
-                php-version: "5.6"
-              - wp-version: "5.4.1"
-                php-version: "7.0"
-              - wp-version: "5.4.1"
-                php-version: "7.1"
-              - wp-version: "4.9"
-                php-version: "7.3"
+              - wp_version: "5.4.1"
+                php_version: "5.6"
+              - wp_version: "5.4.1"
+                php_version: "7.0"
+              - wp_version: "5.4.1"
+                php_version: "7.1"
+              - wp_version: "4.9"
+                php_version: "7.3"
       - linter:
           requires:
             - build-php5.6
@@ -209,16 +209,16 @@ workflows:
           requires:
             - linter
       - e2e_tests:
-          name: e2e-tests-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+          name: e2e-tests-wp<< matrix.wp_version >>-php<< matrix.php_version >>
           matrix:
             parameters:
-              wp-version: ["4.9", "5.4.1"]
-              php-version: ["5.6", "7.2", "7.3"]
+              wp_version: ["4.9", "5.4.1"]
+              php_version: ["5.6", "7.2", "7.3"]
             exclude:
-              - wp-version: "5.4.1"
-                php-version: "5.6"
-              - wp-version: "4.9"
-                php-version: "7.3"
+              - wp_version: "5.4.1"
+                php_version: "5.6"
+              - wp_version: "4.9"
+                php_version: "7.3"
           requires:
             - unit_tests
-            - build-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+            - build-wp<< matrix.wp_version >>-php<< matrix.php_version >>
