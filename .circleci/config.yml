@@ -95,15 +95,15 @@ jobs:
     environment:
       - MYSQL_VERSION: "5.6"
       - PHP_VERSION: "7.2"
-      - PHP_UNIT_VERSION: "5.7.20"
+      - PHP_UNIT_VERSION: "8"
       - WP_VERSION: "5"
 
   build-php73:
     <<: *build-template
     environment:
       - MYSQL_VERSION: "5.6"
-      - PHP_VERSION: "7.2"
-      - PHP_UNIT_VERSION: "5.7.20"
+      - PHP_VERSION: "7.3"
+      - PHP_UNIT_VERSION: "8"
       - WP_VERSION: "5"
 
   linter:
