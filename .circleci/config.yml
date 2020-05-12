@@ -125,6 +125,11 @@ jobs:
       - restore_and_start_wp
       - run:
           name: Run e2e tests
+          environment:
+            - MYSQL_VERSION: 5.6
+            - PHP_VERSION: 5.6
+            - PHP_UNIT_VERSION: 5.7.20
+            - WP_VERSION: 5
           command: |
             docker-compose up --no-start e2e-test
             docker cp ./e2e-tests/. "$(docker-compose ps -q e2e-test)":/e2e
@@ -138,11 +143,6 @@ jobs:
             docker cp "$(docker-compose ps -q e2e-test)":/e2e/cypress cypress-results || true
             mv cypress-results/screenshots cypress-results/videos -t /tmp/workspace/artifacts/cypress/ || true
             mv cypress-results/xml /tmp/workspace/test-results/cypress || true
-      - run:
-          when: always
-          name: WordPress and db logs
-          command: |
-            docker-compose logs wordpress db
       - store_artifacts:
           path: /tmp/workspace/artifacts
       - store_test_results:
