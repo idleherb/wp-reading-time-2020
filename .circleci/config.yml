@@ -39,8 +39,6 @@ commands:
 
 jobs:
   build:
-    docker:
-      - image: cimg/base:2020.01
     parameters:
       php-version:
         type: string
@@ -48,6 +46,8 @@ jobs:
       wp-version:
         type: string
         default: "5.4.1"
+    docker:
+      - image: cimg/base:2020.01
     environment:
       - MYSQL_VERSION: "5.6"
       - PHP_VERSION: << parameters.php-version >>
@@ -83,8 +83,6 @@ jobs:
             - var_lib_mysql
 
   linter:
-    docker:
-      - image: cimg/base:2020.01
     parameters:
       php-version:
         type: string
@@ -92,6 +90,8 @@ jobs:
       wp-version:
         type: string
         default: "5.4.1"
+    docker:
+      - image: cimg/base:2020.01
     steps:
       - restore_and_start_wp:
           php-version: << matrix.php-version >>
@@ -112,8 +112,6 @@ jobs:
           path: /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/phpcs
 
   unit_tests:
-    docker:
-      - image: cimg/base:2020.01
     parameters:
       php-version:
         type: string
@@ -121,6 +119,8 @@ jobs:
       wp-version:
         type: string
         default: "5.4.1"
+    docker:
+      - image: cimg/base:2020.01
     steps:
       - restore_and_start_wp:
           php-version: << matrix.php-version >>
@@ -147,8 +147,6 @@ jobs:
           path: /tmp/workspace/wp<< matrix.wp-version >>-php<< matrix.php-version >>/test-results/phpunit
 
   e2e_tests:
-    docker:
-      - image: cimg/base:2020.01
     parameters:
       php-version:
         type: string
@@ -156,6 +154,8 @@ jobs:
       wp-version:
         type: string
         default: "5.4.1"
+    docker:
+      - image: cimg/base:2020.01
     steps:
       - restore_and_start_wp
       - run:
@@ -202,9 +202,13 @@ workflows:
               - wp-version: "4.9"
                 php-version: "7.3"
       - linter:
+          wp-version: "5.4.1"
+          php-version: "7.3"
           requires:
-            - build-php5.6
+            - build-wp5.4.1-php7.3
       - unit_tests:
+          wp-version: "5.4.1"
+          php-version: "7.3"
           requires:
             - linter
       - e2e_tests:
