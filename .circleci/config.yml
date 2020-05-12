@@ -3,6 +3,19 @@ version: 2.1
 commands:
   restore_and_start_wp:
     description: Restore installation and start WordPress
+    parameters:
+      - mysql-version:
+          type: string
+          default: 5.6
+      - php-version:
+          type: string
+          default: 5.6
+      - php-unit-version:
+          type: string
+          default: 5.7.20
+      - wp-version:
+          type: string
+          default: 5
     steps:
       - attach_workspace:
           at: /tmp/workspace/storage
@@ -16,13 +29,22 @@ commands:
       - run:
           name: Start WordPress
           command: |
-            docker-compose up -d wordpress
+            MYSQL_VERSION=<< parameters.mysql-version >> \
+              PHP_UNIT_VERSION=<< parameters.php-unit-version >> \
+              PHP_VERSION=<< parameters.php-version >> \
+              WP_VERSION=<< parameters.wp-version >> \
+              docker-compose up -d wordpress
             sleep 10
 
 jobs:
   build:
     docker:
       - image: cimg/base:2020.01
+    environment:
+      - MYSQL_VERSION: 5.6
+      - PHP_VERSION: 5.6
+      - PHP_UNIT_VERSION: 5.7.20
+      - WP_VERSION: 5
     steps:
       - setup_remote_docker
       - checkout
