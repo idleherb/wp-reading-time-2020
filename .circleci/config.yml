@@ -187,7 +187,7 @@ workflows:
   build_and_test:
     jobs:
       - build:
-          name: build-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+          # name: build-wp<< matrix.wp-version >>-php<< matrix.php-version >>
           matrix:
             parameters:
               wp-version: ["4.9", "5.4.1"]
