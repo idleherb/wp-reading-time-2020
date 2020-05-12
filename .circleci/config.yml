@@ -38,12 +38,16 @@ commands:
             sleep 10
 
 jobs:
-  build-php56: &build-template
+  build:
     docker:
       - image: cimg/base:2020.01
+    parameters:
+      php-version:
+        type: string
+        default: "5.6"
     environment:
       - MYSQL_VERSION: "5.6"
-      - PHP_VERSION: "5.6"
+      - PHP_VERSION: << parameters.php-version >>
       - PHP_UNIT_VERSION: "5.7.20"
       - WP_VERSION: "5"
     steps:
@@ -74,38 +78,6 @@ jobs:
           paths:
             - var_www_html
             - var_lib_mysql
-
-  build-php70:
-    <<: *build-template
-    environment:
-      - MYSQL_VERSION: "5.6"
-      - PHP_VERSION: "7.0"
-      - PHP_UNIT_VERSION: "5.7.20"
-      - WP_VERSION: "5"
-
-  build-php71:
-    <<: *build-template
-    environment:
-      - MYSQL_VERSION: "5.6"
-      - PHP_VERSION: "7.1"
-      - PHP_UNIT_VERSION: "5.7.20"
-      - WP_VERSION: "5"
-
-  build-php72:
-    <<: *build-template
-    environment:
-      - MYSQL_VERSION: "5.6"
-      - PHP_VERSION: "7.2"
-      - PHP_UNIT_VERSION: "8"
-      - WP_VERSION: "5"
-
-  build-php73:
-    <<: *build-template
-    environment:
-      - MYSQL_VERSION: "5.6"
-      - PHP_VERSION: "7.3"
-      - PHP_UNIT_VERSION: "8"
-      - WP_VERSION: "5"
 
   linter:
     docker:
@@ -187,14 +159,14 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build-php56
-      - build-php70
-      - build-php71
-      - build-php72
-      - build-php73
+      - build:
+          name: build-php<< matrix.php-version >>
+          matrix:
+            parameters:
+              php-version: ["5.6", "7.0", "7.1", "7.2", "7.3", "7.4"]
       - linter:
           requires:
-            - build-php56
+            - build-php5.6
       - unit_tests:
           requires:
             - linter
