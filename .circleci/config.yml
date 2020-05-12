@@ -38,7 +38,7 @@ commands:
             sleep 10
 
 jobs:
-  build-php5.6: &build-template
+  build-php56: &build-template
     docker:
       - image: cimg/base:2020.01
     environment:
@@ -72,13 +72,10 @@ jobs:
             - var_www_html
             - var_lib_mysql
 
-  build-php7.0:
+  build-php70:
     <<: *build-template
     environment:
-      - MYSQL_VERSION: 5.6
       - PHP_VERSION: 7.0
-      - PHP_UNIT_VERSION: 5.7.20
-      - WP_VERSION: 5
 
   linter:
     docker:
@@ -160,11 +157,11 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build-php5.6
-      - build-php7.0
+      - build-php56
+      - build-php70
       - linter:
           requires:
-            - build-php5.6
+            - build-php56
       - unit_tests:
           requires:
             - linter
