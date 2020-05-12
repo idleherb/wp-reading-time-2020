@@ -1,5 +1,5 @@
 ARG WP_VERSION=5.4.1
-ARG PHP_VERSION=5.6
+ARG PHP_VERSION=7.3
 FROM wordpress:${WP_VERSION}-php${PHP_VERSION}
 
 RUN apt-get update && apt-get install -y less \
