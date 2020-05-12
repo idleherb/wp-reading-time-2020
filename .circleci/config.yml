@@ -42,10 +42,10 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     environment:
-      - MYSQL_VERSION: 5.6
-      - PHP_VERSION: 5.6
-      - PHP_UNIT_VERSION: 5.7.20
-      - WP_VERSION: 5
+      - MYSQL_VERSION: "5.6"
+      - PHP_VERSION: "5.6"
+      - PHP_UNIT_VERSION: "5.7.20"
+      - WP_VERSION: "5"
     steps:
       - setup_remote_docker
       - checkout
@@ -77,6 +77,30 @@ jobs:
     environment:
       - MYSQL_VERSION: "5.6"
       - PHP_VERSION: "7.0"
+      - PHP_UNIT_VERSION: "5.7.20"
+      - WP_VERSION: "5"
+
+  build-php71:
+    <<: *build-template
+    environment:
+      - MYSQL_VERSION: "5.6"
+      - PHP_VERSION: "7.1"
+      - PHP_UNIT_VERSION: "5.7.20"
+      - WP_VERSION: "5"
+
+  build-php72:
+    <<: *build-template
+    environment:
+      - MYSQL_VERSION: "5.6"
+      - PHP_VERSION: "7.2"
+      - PHP_UNIT_VERSION: "5.7.20"
+      - WP_VERSION: "5"
+
+  build-php73:
+    <<: *build-template
+    environment:
+      - MYSQL_VERSION: "5.6"
+      - PHP_VERSION: "7.2"
       - PHP_UNIT_VERSION: "5.7.20"
       - WP_VERSION: "5"
 
@@ -162,6 +186,9 @@ workflows:
     jobs:
       - build-php56
       - build-php70
+      - build-php71
+      - build-php72
+      - build-php73
       - linter:
           requires:
             - build-php56
