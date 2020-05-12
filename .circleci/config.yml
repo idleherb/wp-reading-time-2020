@@ -157,7 +157,9 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
-      - restore_and_start_wp
+      - restore_and_start_wp:
+          php-version: << parameters.php-version >>
+          wp-version: << parameters.wp-version >>
       - run:
           name: Run e2e tests
           environment:
