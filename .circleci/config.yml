@@ -75,10 +75,10 @@ jobs:
   build-php70:
     <<: *build-template
     environment:
-      - MYSQL_VERSION: 5.6
-      - PHP_VERSION: 7.0
-      - PHP_UNIT_VERSION: 5.7.20
-      - WP_VERSION: 5
+      - MYSQL_VERSION: "5.6"
+      - PHP_VERSION: "7.0"
+      - PHP_UNIT_VERSION: "5.7.20"
+      - WP_VERSION: "5"
 
   linter:
     docker:
