@@ -28,12 +28,13 @@ commands:
             docker cp /tmp/workspace/storage/. "$(docker-compose ps -q wp-and-db-storage)":/storage
       - run:
           name: Start WordPress
+          environment:
+            - MYSQL_VERSION: << parameters.mysql-version >>
+            - PHP_VERSION: << parameters.php-version >>
+            - PHP_UNIT_VERSION: << parameters.php-unit-version >>
+            - WP_VERSION: << parameters.wp-version >>
           command: |
-            MYSQL_VERSION=<< parameters.mysql-version >> \
-              PHP_UNIT_VERSION=<< parameters.php-unit-version >> \
-              PHP_VERSION=<< parameters.php-version >> \
-              WP_VERSION=<< parameters.wp-version >> \
-              docker-compose up -d wordpress
+            docker-compose up -d wordpress
             sleep 10
 
 jobs:
