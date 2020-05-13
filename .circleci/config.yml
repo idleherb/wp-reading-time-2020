@@ -228,7 +228,7 @@ workflows:
               - wp-version: "4.9"
                 php-version: "7.3"
           requires:
-            - linter<< matrix.wp-version >>-php<< matrix.php-version >>
+            - linter-wp<< matrix.wp-version >>-php<< matrix.php-version >>
       - e2e_tests:
           name: e2e-tests-wp<< matrix.wp-version >>-php<< matrix.php-version >>
           matrix:
