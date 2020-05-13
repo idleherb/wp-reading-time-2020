@@ -204,15 +204,31 @@ workflows:
               - wp-version: "4.9"
                 php-version: "7.3"
       - linter:
-          wp-version: "5.4.1"
-          php-version: "7.3"
+          name: linter-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+          matrix:
+            parameters:
+              wp-version: ["4.9", "5.4.1"]
+              php-version: ["5.6", "7.2", "7.3"]
+            exclude:
+              - wp-version: "5.4.1"
+                php-version: "5.6"
+              - wp-version: "4.9"
+                php-version: "7.3"
           requires:
-            - build-wp5.4.1-php7.3
+            - build-wp<< matrix.wp-version >>-php<< matrix.php-version >>
       - unit_tests:
-          wp-version: "5.4.1"
-          php-version: "7.3"
+          name: unit-tests-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+          matrix:
+            parameters:
+              wp-version: ["4.9", "5.4.1"]
+              php-version: ["5.6", "7.2", "7.3"]
+            exclude:
+              - wp-version: "5.4.1"
+                php-version: "5.6"
+              - wp-version: "4.9"
+                php-version: "7.3"
           requires:
-            - linter
+            - linter<< matrix.wp-version >>-php<< matrix.php-version >>
       - e2e_tests:
           name: e2e-tests-wp<< matrix.wp-version >>-php<< matrix.php-version >>
           matrix:
@@ -225,5 +241,4 @@ workflows:
               - wp-version: "4.9"
                 php-version: "7.3"
           requires:
-            - unit_tests
-            - build-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+            - unit-tests-wp<< matrix.wp-version >>-php<< matrix.php-version >>
