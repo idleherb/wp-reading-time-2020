@@ -193,52 +193,60 @@ workflows:
           matrix:
             parameters:
               wp-version: ["4.9", "5.4.1"]
-              php-version: ["5.6", "7.0", "7.1", "7.2", "7.3"]
+              php-version: ["5.6", "7.0", "7.1", "7.2", "7.3", "7.4"]
             exclude:
+              - wp-version: "4.9"
+                php-version: "7.3"
+              - wp-version: "4.9"
+                php-version: "7.4"
               - wp-version: "5.4.1"
                 php-version: "5.6"
               - wp-version: "5.4.1"
                 php-version: "7.0"
               - wp-version: "5.4.1"
                 php-version: "7.1"
-              - wp-version: "4.9"
-                php-version: "7.3"
       - linter:
-          name: linter-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+          name: phpcs-wp<< matrix.wp-version >>-php<< matrix.php-version >>
           matrix:
             parameters:
               wp-version: ["4.9", "5.4.1"]
-              php-version: ["5.6", "7.2", "7.3"]
+              php-version: ["5.6", "7.2", "7.3", "7.4"]
             exclude:
-              - wp-version: "5.4.1"
-                php-version: "5.6"
               - wp-version: "4.9"
                 php-version: "7.3"
+              - wp-version: "4.9"
+                php-version: "7.4"
+              - wp-version: "5.4.1"
+                php-version: "5.6"
           requires:
             - build-wp<< matrix.wp-version >>-php<< matrix.php-version >>
       - unit_tests:
-          name: unit-tests-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+          name: phpunit-wp<< matrix.wp-version >>-php<< matrix.php-version >>
           matrix:
             parameters:
               wp-version: ["4.9", "5.4.1"]
-              php-version: ["5.6", "7.2", "7.3"]
+              php-version: ["5.6", "7.2", "7.3", "7.4"]
             exclude:
-              - wp-version: "5.4.1"
-                php-version: "5.6"
               - wp-version: "4.9"
                 php-version: "7.3"
+              - wp-version: "4.9"
+                php-version: "7.4"
+              - wp-version: "5.4.1"
+                php-version: "5.6"
           requires:
-            - linter-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+            - phpcs-wp<< matrix.wp-version >>-php<< matrix.php-version >>
       - e2e_tests:
-          name: e2e-tests-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+          name: e2e-wp<< matrix.wp-version >>-php<< matrix.php-version >>
           matrix:
             parameters:
               wp-version: ["4.9", "5.4.1"]
-              php-version: ["5.6", "7.2", "7.3"]
+              php-version: ["5.6", "7.2", "7.3", "7.4"]
             exclude:
-              - wp-version: "5.4.1"
-                php-version: "5.6"
               - wp-version: "4.9"
                 php-version: "7.3"
+              - wp-version: "4.9"
+                php-version: "7.4"
+              - wp-version: "5.4.1"
+                php-version: "5.6"
           requires:
-            - unit-tests-wp<< matrix.wp-version >>-php<< matrix.php-version >>
+            - phpunit-wp<< matrix.wp-version >>-php<< matrix.php-version >>
