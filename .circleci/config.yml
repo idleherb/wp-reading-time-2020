@@ -69,7 +69,6 @@ jobs:
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
                 composer remove --dev phpunit/phpunit && \
                 composer require --dev phpunit/phpunit ^${PHP_UNIT_VERSION} && \
-                composer update --prefer-lowest && \
                 composer install"
       - run:
           name: Fetch installation data
