@@ -4,15 +4,9 @@ commands:
   restore_and_start_wp:
     description: Restore installation and start WordPress
     parameters:
-      mysql-version:
-        type: string
-        default: "5.6"
       php-version:
         type: string
         default: "7.3"
-      php-unit-version:
-        type: string
-        default: "5.7.20"
       wp-version:
         type: string
         default: "5.4.1"
@@ -29,9 +23,7 @@ commands:
       - run:
           name: Start WordPress
           environment:
-            - MYSQL_VERSION: << parameters.mysql-version >>
             - PHP_VERSION: << parameters.php-version >>
-            - PHP_UNIT_VERSION: << parameters.php-unit-version >>
             - WP_VERSION: << parameters.wp-version >>
           command: |
             docker-compose up -d wordpress
@@ -49,9 +41,7 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     environment:
-      - MYSQL_VERSION: "5.6"
       - PHP_VERSION: << parameters.php-version >>
-      - PHP_UNIT_VERSION: "5.7.20"
       - WP_VERSION: << parameters.wp-version >>
     steps:
       - setup_remote_docker
@@ -63,7 +53,6 @@ jobs:
       - run:
           name: Install WordPress Plugin
           command: |
-            echo "php unit version: ${PHP_UNIT_VERSION}"
             docker cp . "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
@@ -160,9 +149,7 @@ jobs:
       - run:
           name: Run e2e tests
           environment:
-            - MYSQL_VERSION: 5.6
             - PHP_VERSION: << parameters.php-version >>
-            - PHP_UNIT_VERSION: 5.7.20
             - WP_VERSION: << parameters.wp-version >>
           command: |
             docker-compose up --no-start e2e-test
