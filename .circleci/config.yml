@@ -51,6 +51,13 @@ jobs:
           command: |
             docker-compose up wordpress-cli
       - run:
+          name: Install and activate third party plugins
+          command: |
+            docker exec -ti "$(docker-compose ps -q wordpress)" \
+              sh -c "cd /var/www/html && \
+                wp plugin install disable-emojis && \
+                wp plugin activate disable-emojis"
+      - run:
           name: Install WordPress Plugin
           command: |
             docker cp . "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin
