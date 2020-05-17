@@ -21,7 +21,7 @@ class ReadingTimeTest extends WP_UnitTestCase {
 	public function test_get_coffees_with_3_mins() {
 		$reading_time = 3;
 		$actual       = ( new ReadingTime() )->get_coffees( $reading_time );
-		$expected     = '☕';
+		$expected     = 1;
 
 		$this->assertEquals( $expected, $actual );
 	}
@@ -29,7 +29,7 @@ class ReadingTimeTest extends WP_UnitTestCase {
 	public function test_get_coffees_with_17_mins() {
 		$reading_time = 17;
 		$actual       = ( new ReadingTime() )->get_coffees( $reading_time );
-		$expected     = '☕☕☕☕';
+		$expected     = 4;
 
 		$this->assertEquals( $expected, $actual );
 	}
