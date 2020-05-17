@@ -7,11 +7,12 @@ class ReadingTime {
 	private $speed = 250;
 
 	public function init() {
-		add_filter( 'the_content', 'add_reading_time_to_content' );
+		add_filter( 'the_content', 'add_filter_the_content' );
 	}
 
-	private function add_reading_time_to_content() {
-		assert( true );
+	public function add_filter_the_content( $content ) {
+		$reading_time_text = '<p>' . $this->get_reading_time( $content ) . ' min</p>';
+		return $reading_time_text . $content;
 	}
 
 	public function get_reading_time( $text ) {

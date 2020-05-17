@@ -20,6 +20,13 @@ class ReadingTimeTest extends WP_UnitTestCase {
 
 	public function test_init() {
 		( new ReadingTime() )->init();
-		$this->assertNotEquals( false, has_filter( 'the_content', 'add_reading_time_to_content' ) );
+		$this->assertNotEquals( false, has_filter( 'the_content', 'add_filter_the_content' ) );
+	}
+
+	public function test_add_filter_the_content() {
+		$content  = 'FOO BAR';
+		$actual   = ( new ReadingTime() )->add_filter_the_content( $content );
+		$expected = '<p>1 min</p>' . $content;
+		$this->assertEquals( $expected, $actual );
 	}
 }
