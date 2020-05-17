@@ -50,7 +50,7 @@ describe('wp-reading-time-2020 e2e tests', () => {
 	describe('homepage', () => {
 		it('displays the reading time for a post on the homepage', () => {
 			cy.visit('/');
-			cy.contains(/^☕ 1 min/);
+			cy.contains(/^\u2615 1 min/);
 		});
 	});
 		

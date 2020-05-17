@@ -5,7 +5,7 @@ namespace idleherb\ReadingTime;
 class ReadingTime {
 
 	private $coffee_time = 5;
-	private $emoji       = '☕';
+	private $emoji       = '"\u2615"';
 	private $speed       = 250;
 
 	public function init() {
@@ -15,7 +15,7 @@ class ReadingTime {
 	public function add_filter_the_content( $content ) {
 		$reading_time      = $this->get_reading_time( $content );
 		$num_coffees       = $this->get_coffees( $reading_time );
-		$reading_time_text = '<p>' . str_repeat( $this->emoji, $num_coffees ) . ' ' . $reading_time . ' min</p>';
+		$reading_time_text = '<p>' . str_repeat( json_decode( $this->emoji ), $num_coffees ) . ' ' . $reading_time . ' min</p>';
 		return $reading_time_text . $content;
 	}
 
