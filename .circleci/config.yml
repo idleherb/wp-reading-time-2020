@@ -55,8 +55,8 @@ jobs:
           command: |
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "cd /var/www/html && \
-                wp plugin install disable-emojis && \
-                wp plugin activate disable-emojis"
+                wp --allow-root plugin install disable-emojis && \
+                wp --allow-root plugin activate disable-emojis"
       - run:
           name: Install WordPress Plugin
           command: |
