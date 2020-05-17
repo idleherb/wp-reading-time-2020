@@ -32,3 +32,4 @@ e2e-tests/cypress/screenshots/
 e2e-tests/cypress/videos/
 e2e-tests/results/
 composer.lock
+e2e-tests/cypress/xml/output.xml

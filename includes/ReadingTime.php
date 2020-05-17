@@ -13,7 +13,8 @@ class ReadingTime {
 	}
 
 	public function add_filter_the_content( $content ) {
-		$reading_time_text = '<p>' . $this->get_reading_time( $content ) . ' min</p>';
+		$reading_time      = $this->get_reading_time( $content );
+		$reading_time_text = '<p>' . $this->get_coffees( $reading_time ) . ' ' . $reading_time . ' min</p>';
 		return $reading_time_text . $content;
 	}
 

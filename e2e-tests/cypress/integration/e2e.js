@@ -1,5 +1,6 @@
 function login() {
 	cy.visit('/wp-login.php');
+	cy.wait(50);
 	cy.get('#user_login')
 		.type(Cypress.env('wp_user') || 'admin');
 	cy.get('#user_pass')
@@ -49,7 +50,7 @@ describe('wp-reading-time-2020 e2e tests', () => {
 	describe('homepage', () => {
 		it('displays the reading time for a post on the homepage', () => {
 			cy.visit('/');
-			cy.contains('1 min');
+			cy.contains(/^☕ 1 min/);
 		});
 	});
 		
