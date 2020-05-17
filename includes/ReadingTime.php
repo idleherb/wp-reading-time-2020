@@ -19,11 +19,12 @@ class ReadingTime {
 		return $reading_time_text . $content;
 	}
 
-	public function get_coffees( $reading_time ) {
+	public function get_coffees( $text ) {
+		$reading_time = $this->get_reading_time( $text );
 		return max( 1, ceil( $reading_time / $this->coffee_time ) );
 	}
 
 	public function get_reading_time( $text ) {
-		return (int) ceil( str_word_count( $text ) / $this->speed );
+		return max( 1, ceil( str_word_count( $text ) / $this->speed ) );
 	}
 }
