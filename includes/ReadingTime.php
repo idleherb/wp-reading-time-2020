@@ -15,7 +15,7 @@ class ReadingTime {
 	public function add_filter_the_content( $content ) {
 		$reading_time      = $this->get_reading_time( $content );
 		$num_coffees       = $this->get_coffees( $reading_time );
-		$reading_time_text = '<p class="wp-exclude-emoji">' . str_repeat( $this->emoji, $num_coffees ) . ' ' . $reading_time . ' min</p>';
+		$reading_time_text = '<p>' . str_repeat( $this->emoji, $num_coffees ) . ' ' . $reading_time . ' min</p>';
 		return $reading_time_text . $content;
 	}
 

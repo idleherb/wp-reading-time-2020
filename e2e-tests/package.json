@@ -4,7 +4,7 @@
   "description": "e2e-tests",
   "repository": {},
   "scripts": {
-    "test:e2e": "npm install && npx cypress install && ELECTRON_ENABLE_LOGGING=true npx cypress run"
+    "test:e2e": "npm install && npx cypress install && ELECTRON_ENABLE_LOGGING=true npx cypress run --browser chrome"
   },
   "author": "",
   "license": "ISC",
