@@ -1,9 +1,9 @@
 function login() {
 	cy.visit('/wp-login.php');
 	cy.get('#user_login')
-		.type('admin');
+		.type(Cypress.env('wp_user') || 'admin');
 	cy.get('#user_pass')
-		.type('secret');
+		.type(Cypress.env('wp_password') || 'secret');
 	cy.get('#wp-submit').click();
 }
 
@@ -31,36 +31,28 @@ function deactivatePlugin() {
 	cy.contains('Plugin deactivated');
 }
 
-describe('admin panel', () => {
-	before(() => {
-		login();
-		activatePlugin();
-	});
-	
-	after(() => {
-		deactivatePlugin();
-		logout();
-	});
-
-	it('displays the activated plugin in the admin section', () => {
-		cy.visit('/wp-admin/plugins.php');
-		cy.contains(/^Wp Reading Time 2020$/)
-			.parent()
-			.should('have.class', 'column-primary');
-	});
-});
-
-describe('homepage', () => {
+describe('wp-reading-time-2020 e2e tests', () => {
 	before(() => {
 		login();
 		activatePlugin();
 	});
 
-	it('displays the reading time for a post on the homepage', () => {
-		cy.visit('/');
-		cy.contains('1 min');
+	describe('admin panel', () => {
+		it('displays the activated plugin in the admin section', () => {
+			cy.visit('/wp-admin/plugins.php');
+			cy.contains(/^Wp Reading Time 2020$/)
+				.parent()
+				.should('have.class', 'column-primary');
+		});
 	});
 	
+	describe('homepage', () => {
+		it('displays the reading time for a post on the homepage', () => {
+			cy.visit('/');
+			cy.contains('1 min');
+		});
+	});
+		
 	after(() => {
 		deactivatePlugin();
 		logout();
