@@ -24,7 +24,6 @@ class ReadingTime {
 	}
 
 	public function get_reading_time( $text ) {
-		$words = explode( ' ', $text );
-		return (int) ceil( count( $words ) / $this->speed );
+		return (int) ceil( str_word_count( $text ) / $this->speed );
 	}
 }
