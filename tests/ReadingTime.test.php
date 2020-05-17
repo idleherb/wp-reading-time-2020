@@ -18,6 +18,14 @@ class ReadingTimeTest extends WP_UnitTestCase {
 		$this->assertEquals( $expected, $actual );
 	}
 
+	public function test_get_coffees_with_3_mins() {
+		$reading_time = 3;
+		$actual       = ( new ReadingTime() )->get_coffees( $reading_time );
+		$expected     = '☕';
+
+		$this->assertEquals( $expected, $actual );
+	}
+
 	public function test_init() {
 		$reading_time = new ReadingTime();
 		$reading_time->init();
