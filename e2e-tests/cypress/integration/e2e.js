@@ -1,12 +1,14 @@
 function login() {
 	cy.visit('/wp-login.php');
 	cy.get('#user_login')
-		.clear()
-		.type('admin');
+		.type('root');
 	cy.get('#user_pass')
-		.clear()
-		.type('secret');
+		.type('root');
 	cy.get('#wp-submit').click();
+}
+
+function logout() {
+	cy.contains(/^Log Out$/).click({ force: true });
 }
 
 function activatePlugin() {
@@ -20,6 +22,7 @@ function activatePlugin() {
 }
 
 function deactivatePlugin() {
+	cy.visit('/wp-admin/plugins.php');
 	cy.get('#the-list')
 		.contains(/^Wp Reading Time 2020$/)
 		.siblings('.row-actions.visible')
@@ -34,7 +37,10 @@ describe('admin panel', () => {
 		activatePlugin();
 	});
 	
-	after(deactivatePlugin);
+	after(() => {
+		deactivatePlugin();
+		logout();
+	});
 
 	it('displays the activated plugin in the admin section', () => {
 		cy.visit('/wp-admin/plugins.php');
@@ -42,9 +48,21 @@ describe('admin panel', () => {
 			.parent()
 			.should('have.class', 'column-primary');
 	});
+});
+
+describe('homepage', () => {
+	before(() => {
+		login();
+		activatePlugin();
+	});
 
 	it('displays the reading time for a post on the homepage', () => {
 		cy.visit('/');
-		cy.contains('Reading time');
+		cy.contains('1 min');
+	});
+	
+	after(() => {
+		deactivatePlugin();
+		logout();
 	});
 });
