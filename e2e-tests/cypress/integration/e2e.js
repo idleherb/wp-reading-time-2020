@@ -1,9 +1,9 @@
 function login() {
 	cy.visit('/wp-login.php');
 	cy.get('#user_login')
-		.type('root');
+		.type('admin');
 	cy.get('#user_pass')
-		.type('root');
+		.type('secret');
 	cy.get('#wp-submit').click();
 }
 
