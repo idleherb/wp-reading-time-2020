@@ -7,7 +7,7 @@ class ReadingTime {
 	private $speed = 250;
 
 	public function init() {
-		add_filter( 'the_content', 'add_filter_the_content' );
+		add_filter( 'the_content', array( $this, 'add_filter_the_content' ) );
 	}
 
 	public function add_filter_the_content( $content ) {

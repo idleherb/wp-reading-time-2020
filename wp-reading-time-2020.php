@@ -19,4 +19,4 @@ use idleherb\ReadingTime\ReadingTime;
 // Your code starts here.
 require_once __DIR__ . '/vendor/autoload.php';
 
-new ReadingTime();
+( new ReadingTime() )->init();

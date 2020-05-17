@@ -19,8 +19,9 @@ class ReadingTimeTest extends WP_UnitTestCase {
 	}
 
 	public function test_init() {
-		( new ReadingTime() )->init();
-		$this->assertNotEquals( false, has_filter( 'the_content', 'add_filter_the_content' ) );
+		$reading_time = new ReadingTime();
+		$reading_time->init();
+		$this->assertNotEquals( false, has_filter( 'the_content', array( $reading_time, 'add_filter_the_content' ) ) );
 	}
 
 	public function test_add_filter_the_content() {

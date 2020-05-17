@@ -43,7 +43,7 @@ describe('admin panel', () => {
 			.should('have.class', 'column-primary');
 	});
 
-	it.skip('displays the reading time for a post on the homepage', () => {
+	it('displays the reading time for a post on the homepage', () => {
 		cy.visit('/');
 		cy.contains('Reading time');
 	});
