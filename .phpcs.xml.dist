@@ -32,6 +32,8 @@
 	<config name="minimum_supported_wp_version" value="4.6"/>
 	<rule ref="WordPress">
 		<exclude name="WordPress.Files.FileName" />
+		<exclude name="WordPress.PHP.DontExtract.extract_extract" />
+		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
 	</rule>
 	<rule ref="WordPress.WP.I18n" />
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing">

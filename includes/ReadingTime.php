@@ -14,9 +14,28 @@ class ReadingTime {
 
 	public function add_filter_the_content( $content ) {
 		$reading_time      = $this->get_reading_time( $content );
+		$reading_time_copy = $reading_time . ' min';
 		$num_coffees       = $this->get_coffees( $reading_time );
-		$reading_time_text = '<p>' . str_repeat( $this->emoji, $num_coffees ) . ' ' . $reading_time . ' min</p>';
-		return $reading_time_text . $content;
+		$coffees_copy      = str_repeat( $this->emoji, $num_coffees );
+		$reading_time_html = $this->load_html_fragment(
+			'ReadingTime.view.php',
+			array(
+				'reading_time' => $reading_time_copy,
+				'coffees'      => $coffees_copy,
+			)
+		);
+
+		return $reading_time_html . $content;
+	}
+
+	private function load_html_fragment( $view, $vars ) {
+		extract( $vars );
+		ob_start();
+		include $view;
+		$html_fragment = ob_get_contents() ?: '';
+		ob_end_clean();
+
+		return trim( $html_fragment );
 	}
 
 	public function get_coffees( $text ) {
