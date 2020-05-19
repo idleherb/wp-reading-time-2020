@@ -46,9 +46,16 @@ describe('wp-reading-time-2020 e2e tests', () => {
 				.should('have.class', 'column-primary');
 		});
 
-		it('displays the plugin in the settings section', () => {
+		it('displays various plugin settings with default values', () => {
 			cy.visit('/wp-admin/options-general.php');
-			cy.contains(/^Reading Time Plugin$/);
+			cy.contains(/^Reading Time Plugin$/)
+				.click();
+			cy.contains('Reading Time Settings');
+			cy.contains('Words per minute (WPM)')
+				.siblings('td')
+				.children('input')
+				.should('have.value', '250');
+			cy.contains('Save Changes');
 		});
 	});
 	

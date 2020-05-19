@@ -34,7 +34,7 @@ class ReadingTimeSettingsTest extends \WP_UnitTestCase {
 				'Reading Time Plugin Settings',
 				'Reading Time Plugin',
 				'manage_options',
-				'reading_time_settings_menu_item',
+				'reading_time_plugin',
 				array( $settings, 'render_settings_page' )
 			)
 			->andReturn( true );

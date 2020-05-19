@@ -35,7 +35,7 @@ class ReadingTimeSettings {
 			'Reading Time Plugin Settings',
 			'Reading Time Plugin',
 			'manage_options',
-			'reading_time_settings_menu_item',
+			'reading_time_plugin',
 			array( $this, 'render_settings_page' )
 		);
 	}
