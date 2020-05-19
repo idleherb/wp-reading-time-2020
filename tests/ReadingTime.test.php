@@ -53,9 +53,9 @@ class ReadingTimeTest extends \WP_UnitTestCase {
 	}
 
 	public function test_add_filter_the_content() {
-		$content  = 'FOO BAR';
+		$content  = implode( ' ', array_fill( 0, 4001, 'foo' ) );
 		$actual   = ( new ReadingTime() )->add_filter_the_content( $content );
-		$expected = '<p>☕ 1 min</p>' . $content;
+		$expected = '<p>☕☕☕☕ 17 min</p>' . $content;
 
 		$this->assertEquals( $expected, $actual );
 	}

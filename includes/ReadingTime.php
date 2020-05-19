@@ -15,7 +15,7 @@ class ReadingTime {
 	public function add_filter_the_content( $content ) {
 		$reading_time      = $this->get_reading_time( $content );
 		$reading_time_copy = $reading_time . ' min';
-		$num_coffees       = $this->get_coffees( $reading_time );
+		$num_coffees       = $this->get_coffees( $content );
 		$coffees_copy      = str_repeat( $this->emoji, $num_coffees );
 		$reading_time_html = $this->load_html_fragment(
 			'ReadingTime.view.php',
