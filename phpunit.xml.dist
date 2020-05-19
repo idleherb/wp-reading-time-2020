@@ -1,13 +1,21 @@
 <?xml version="1.0"?>
-<phpunit
-	bootstrap="tests/bootstrap.php"
-	backupGlobals="false"
-	colors="true"
-	convertErrorsToExceptions="true"
-	convertNoticesToExceptions="true"
-	convertWarningsToExceptions="true"
-	beStrictAboutTestsThatDoNotTestAnything="false"
-	>
+<phpunit bootstrap="tests/bootstrap.php" 
+	backupGlobals="false" 
+	colors="true" 
+	convertErrorsToExceptions="true" 
+	convertNoticesToExceptions="true" 
+	convertWarningsToExceptions="true" 
+	beStrictAboutTestsThatDoNotTestAnything="false">
+
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">includes</directory>
+			<exclude>
+				<directory suffix=".view.php">includes</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+
 	<testsuites>
 		<testsuite name="WP Reading Time 2020 test suite">
 			<directory suffix=".test.php">./tests/</directory>

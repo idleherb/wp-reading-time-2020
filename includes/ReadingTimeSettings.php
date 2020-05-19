@@ -49,10 +49,16 @@ class ReadingTimeSettings {
 		return $new_input;
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function render_settings_page() {
 		include 'ReadingTimeSettings.view.php';
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function render_setting_wpm() {
 		include 'ReadingTimeSettingWpm.view.php';
 	}
