@@ -45,6 +45,11 @@ describe('wp-reading-time-2020 e2e tests', () => {
 				.parent()
 				.should('have.class', 'column-primary');
 		});
+
+		it('displays the plugin in the settings section', () => {
+			cy.visit('/wp-admin/options-general.php');
+			cy.contains(/^Reading Time 2020$/);
+		});
 	});
 	
 	describe('homepage', () => {

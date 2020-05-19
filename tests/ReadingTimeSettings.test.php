@@ -20,4 +20,23 @@ class ReadingTimeSettingsTest extends \WP_UnitTestCase {
 
 		\Mockery::close();
 	}
+
+	public function test_add_settings_menu_item() {
+		$settings = new ReadingTimeSettings();
+
+		$add_action_mock = PHPMockery::mock( __NAMESPACE__, 'add_options_page' )
+			->once()
+			->with(
+				'Reading Time 2020 Settings',
+				'Reading Time 2020',
+				'manage_options',
+				'wp-reading-time-2020',
+				array( $settings, 'add_options_page_cb' )
+			)
+			->andReturn( true );
+
+		$settings->add_settings_menu_item();
+
+		\Mockery::close();
+	}
 }

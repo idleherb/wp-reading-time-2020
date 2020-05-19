@@ -15,8 +15,13 @@
 defined( 'ABSPATH' ) || exit;
 
 use idleherb\ReadingTime\ReadingTime;
+use idleherb\ReadingTime\ReadingTimeSettings;
 
 // Your code starts here.
 require_once __DIR__ . '/vendor/autoload.php';
 
-( new ReadingTime() )->init();
+// Required for php-mock-mockery mocks
+if ( getenv( 'APP_ENV' ) !== 'unittest' ) {
+	( new ReadingTime() )->init();
+	( new ReadingTimeSettings() )->init();
+}
