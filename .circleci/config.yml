@@ -129,7 +129,7 @@ jobs:
           command: |
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
-                ./vendor/bin/phpunit --log-junit phpunit-results.xml"
+                APP_ENV=unittest ./vendor/bin/phpunit --log-junit phpunit-results.xml"
       - run:
           when: always
           name: Fetch unit test results

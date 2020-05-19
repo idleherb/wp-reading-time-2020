@@ -1,8 +1,11 @@
 <?php
 
+namespace idleherb\ReadingTime;
+
+use phpmock\mockery\PHPMockery;
 use idleherb\ReadingTime\ReadingTime;
 
-class ReadingTimeTest extends WP_UnitTestCase {
+class ReadingTimeTest extends \WP_UnitTestCase {
 
 	public function test_get_reading_time_with_249_words() {
 		$text     = implode( ' ', array_fill( 0, 249, 'foo' ) );
@@ -38,9 +41,15 @@ class ReadingTimeTest extends WP_UnitTestCase {
 
 	public function test_init() {
 		$reading_time = new ReadingTime();
+
+		$add_action_mock = PHPMockery::mock( __NAMESPACE__, 'add_filter' )
+			->once()
+			->with( 'the_content', array( $reading_time, 'add_filter_the_content' ) )
+			->andReturn( true );
+
 		$reading_time->init();
 
-		$this->assertNotEquals( false, has_filter( 'the_content', array( $reading_time, 'add_filter_the_content' ) ) );
+		\Mockery::close();
 	}
 
 	public function test_add_filter_the_content() {
