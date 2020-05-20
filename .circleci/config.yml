@@ -129,13 +129,17 @@ jobs:
           command: |
             docker exec -ti "$(docker-compose ps -q wordpress)" \
               sh -c "cd /var/www/html/wp-content/plugins/my-plugin && \
-                APP_ENV=unittest ./vendor/bin/phpunit --log-junit phpunit-results.xml"
+                APP_ENV=unittest ./vendor/bin/phpunit --log-junit phpunit-results.xml  --coverage-html phpunit-coverage-report"
       - run:
           when: always
           name: Fetch unit test results
           command: |
             mkdir -p /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/test-results/phpunit
             docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-results.xml /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/test-results/phpunit/results.xml || true
+            mkdir -p /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/artifacts/phpunit
+            docker cp "$(docker-compose ps -q wordpress)":/var/www/html/wp-content/plugins/my-plugin/phpunit-coverage-report/. /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/artifacts/phpunit/coverage-report || true
+      - store_artifacts:
+          path: /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/artifacts/phpunit
       - store_test_results:
           path: /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/test-results/phpunit
 
@@ -172,7 +176,7 @@ jobs:
             mv cypress-results/screenshots cypress-results/videos -t /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/artifacts/cypress/ || true
             mv cypress-results/xml /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/test-results/cypress || true
       - store_artifacts:
-          path: /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/artifacts
+          path: /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/artifacts/cypress
       - store_test_results:
           path: /tmp/workspace/wp<< parameters.wp-version >>-php<< parameters.php-version >>/test-results/cypress
 
