@@ -2,6 +2,8 @@ ARG PHP_VERSION=7.3
 ARG WP_VERSION=5.4.1
 FROM wordpress:${WP_VERSION}-php${PHP_VERSION}
 
+ARG PHP_VERSION
+
 RUN apt-get update && apt-get install -y less \
     wget \
     subversion \
@@ -14,6 +16,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-RUN pecl install xdebug && docker-php-ext-enable xdebug
-
-RUN sudo docker-php-ext-enable xdebug
+RUN if [ "$PHP_VERSION" > "7.0" ] ; then \
+        pecl install xdebug && \
+        docker-php-ext-enable xdebug \
+    ; fi
