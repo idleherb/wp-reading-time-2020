@@ -6,7 +6,14 @@ class ReadingTime {
 
 	private $coffee_time = 5;
 	private $emoji       = '☕';
-	private $speed       = 250;
+	private $speed;
+
+	public function __construct() {
+		$this->speed = get_option(
+			'reading_time_settings',
+			array( 'reading_time_setting_wpm' => '250' )
+		)['reading_time_setting_wpm'];
+	}
 
 	public function init() {
 		add_filter( 'the_content', array( $this, 'add_filter_the_content' ) );
