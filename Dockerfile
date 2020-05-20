@@ -16,7 +16,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-RUN if [ "$PHP_VERSION" > "7.0" ] ; then \
+RUN if [ "$PHP_VERSION" != "5.6" ] && [ "$PHP_VERSION" != "7.0" ] ; then \
         pecl install xdebug && \
         docker-php-ext-enable xdebug \
     ; fi
