@@ -18,9 +18,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 RUN /bin/bash -c '\
     if [[ $PHP_VERSION == 7.1.* ]] || \
-            [[ $PHP_VERSION == 7.2.* ]] || \
-            [[ $PHP_VERSION == 7.3.* ]] || \
-            [[ $PHP_VERSION == 7.4.* ]] \
+        [[ $PHP_VERSION == 7.2.* ]] || \
+        [[ $PHP_VERSION == 7.3.* ]] || \
+        [[ $PHP_VERSION == 7.4.* ]] \
     ; then \
         pecl install xdebug && \
         docker-php-ext-enable xdebug \

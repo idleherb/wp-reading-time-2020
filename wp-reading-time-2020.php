@@ -20,6 +20,11 @@ use idleherb\ReadingTime\ReadingTimeSettings;
 // Your code starts here.
 require_once __DIR__ . '/vendor/autoload.php';
 
+function _load_plugin_textdomain() {
+	load_plugin_textdomain( 'wp-reading-time-2020', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'plugins_loaded', '_load_plugin_textdomain' );
+
 // Required for php-mock-mockery mocks
 if ( getenv( 'APP_ENV' ) !== 'unittest' ) {
 	( new ReadingTime() )->init();

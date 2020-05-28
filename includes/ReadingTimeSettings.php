@@ -23,7 +23,7 @@ class ReadingTimeSettings {
 		);
 		add_settings_field(
 			'reading_time_setting_wpm',
-			'Words per minute (WPM)',
+			__( 'Words per minute (WPM)', 'wp-reading-time-2020' ),
 			array( $this, 'render_setting_wpm' ),
 			'reading_time_settings_page',
 			'reading_time_settings_section'
@@ -33,7 +33,7 @@ class ReadingTimeSettings {
 	public function add_menu_item() {
 		add_options_page(
 			'Reading Time Plugin Settings',
-			'Reading Time Plugin',
+			__( 'Reading Time Plugin', 'wp-reading-time-2020' ),
 			'manage_options',
 			'reading_time_plugin',
 			array( $this, 'render_settings_page' )
